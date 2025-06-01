@@ -13,17 +13,25 @@ services:
     ports:
       - "3306:3306"
     command: --bind-address=0.0.0.0
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent", "--password=${MYSQL_ROOT_PASSWORD}"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   forum-backend:
     build: .
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     env_file:
       - .env
     ports:
       - "8080:8080"
     networks:
       - backend
+    restart: on-failure
 
 volumes:
   mysql-data:

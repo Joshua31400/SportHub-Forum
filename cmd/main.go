@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
-	_ "github.com/go-sql-driver/mysql"
+	"SportHub-Forum/internal/server"
+	"log"
 )
 
 func main() {
-	fmt.Println("Hello, SportHub-Forum!")
+	// Initialise and start the server
+	srv := server.New()
+	log.Fatal(srv.Start())
 }

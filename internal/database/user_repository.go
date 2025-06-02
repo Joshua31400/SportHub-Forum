@@ -2,45 +2,54 @@ package database
 
 import (
 	"SportHub-Forum/internal/models"
+	"database/sql"
 	"fmt"
 	"log"
 	"time"
 )
 
+// CreateUser inserts a new user into the database
 func CreateUser(username, email, password string) error {
-	if err := db.Ping(); err != nil {
-		log.Printf("Failed to connect to database: %v", err)
-		return fmt.Errorf("Database unrichable: %v", err)
-	}
-
-	// Get the current time for the createdAt field
+	// Current time for the createdAt field
 	createdAt := time.Now()
 
 	// Query to insert a new user
 	query := `INSERT INTO user (userName, email, password, createdAt) VALUES (?, ?, ?, ?)`
 
-	result, err := db.Exec(query, username, email, password, createdAt)
+	// Using timeout function instead of direct db.Exec
+	result, err := ExecWithTimeout(query, username, email, password, createdAt)
 	if err != nil {
-		log.Printf("Error SQL for create user: %v", err)
-		return fmt.Errorf("Error to create user: %v", err)
+		log.Printf("SQL error when creating user: %v", err)
+		return fmt.Errorf("failed to create user: %v", err)
 	}
 
-	// Chef if the insertion was successful
+	// Check if the insertion was successful
 	rowsAffected, _ := result.RowsAffected()
 	if rowsAffected == 0 {
-		return fmt.Errorf("No rows affected, user not created")
+		return fmt.Errorf("no rows affected, user not created")
 	}
 	return nil
 }
 
-// Get user by email
+// GetUserByEmail retrieves a user by their email
 func GetUserByEmail(email string) (models.User, error) {
 	var user models.User
 	query := `SELECT userID, userName, email, password, createdAt FROM user WHERE email = ?`
 
-	err := db.QueryRow(query, email).Scan(&user.UserID, &user.Username, &user.Email, &user.Password, &user.CreatedAt)
+	// Using timeout function instead of direct db.QueryRow
+	err := QueryRowWithTimeout(query, email).Scan(
+		&user.UserID,
+		&user.Username,
+		&user.Email,
+		&user.Password,
+		&user.CreatedAt,
+	)
+
 	if err != nil {
-		return models.User{}, fmt.Errorf("User not found: %v", err)
+		if err == sql.ErrNoRows {
+			return models.User{}, fmt.Errorf("user with email %s not found", email)
+		}
+		return models.User{}, fmt.Errorf("database error when fetching user: %v", err)
 	}
 
 	return user, nil

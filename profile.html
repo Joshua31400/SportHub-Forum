@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil simplifié</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <!-- Header avec navigation simple -->
+    <header class="main-header">
+        <h1>SPORT-HUB</h1>
+        <nav>
+            <a href="#" class="active">Profil</a>
+            <a href="#">Accueil</a>
+        </nav>
+    </header>
+
+    <!-- Profil utilisateur -->
+    <section class="user-profile">
+
+        <div class="profile-main">
+            <div class="profile-pic-container">
+                <img src="https://via.placeholder.com/150" alt="Photo de profil" id="profile-pic">
+                <div class="change-photo">
+                    <label for="photo-upload">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="photo-upload" accept="image/*">
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <h1 class="display-name">Tom Pass</h1>
+                <p class="username">@tompass8</p>
+
+                <p class="location-join">
+                    <span><i class="fas fa-calendar-alt"></i> Membre depuis mai 2022</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section des posts -->
+    <section class="posts-section">
+        <h2>Mes posts</h2>
+
+        <!-- Zone pour créer un nouveau post -->
+        <div class="create-post">
+            <img src="https://via.placeholder.com/50" alt="Photo de profil">
+            <textarea placeholder="Quoi de neuf ?"></textarea>
+            <button type="submit">Poster</button>
+        </div>
+
+        <!-- Liste des posts -->
+        <div class="posts-list">
+            <!-- Post 1 -->
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/50" alt="Photo de profil">
+                    <div class="post-user">
+                        <span class="post-name">Tom Pass</span>
+                        <span class="post-username">@tompass8</span>
+                        <span class="post-time">· 2h</span>
+                    </div>
+                </div>
+
+                <div class="post-content">
+                    <p>Je viens de terminer un nouveau projet passionnant ! #developpement #webdesign</p>
+                </div>
+
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> <span>47</span></button>
+                    <button class="comment-btn"><i class="far fa-comment"></i> <span>5</span></button>
+                </div>
+
+                <!-- Zone de commentaires -->
+                <div class="comments-section">
+                    <div class="comment">
+                        <img src="https://via.placeholder.com/40" alt="Photo commentateur">
+                        <div class="comment-content">
+                            <p><strong>Marc D.</strong> <span>@marc_d</span></p>
+                            <p>Super projet ! J'ai hâte d'en voir plus.</p>
+                        </div>
+                    </div>
+
+                    <!-- Zone pour ajouter un commentaire -->
+                    <div class="add-comment">
+                        <img src="https://via.placeholder.com/40" alt="Photo de profil">
+                        <textarea placeholder="Ajouter un commentaire..."></textarea>
+                        <button>Commenter</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post 2 -->
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://via.placeholder.com/50" alt="Photo de profil">
+                    <div class="post-user">
+                        <span class="post-name">Tom Pass</span>
+                        <span class="post-username">@tompass8</span>
+                        <span class="post-time">· 1j</span>
+                    </div>
+                </div>
+
+                <div class="post-content">
+                    <p>Les nouvelles fonctionnalités de CSS sont incroyables ! J'ai hâte de les utiliser dans mes prochains projets. #CSS #WebDev</p>
+                </div>
+
+                <div class="post-actions">
+                    <button><i class="far fa-heart"></i> <span>76</span></button>
+                    <button class="comment-btn"><i class="far fa-comment"></i> <span>8</span></button>
+                </div>
+
+                <!-- Zone de commentaires cachée par défaut -->
+                <div class="comments-section hidden">
+                    <!-- Zone pour ajouter un commentaire -->
+                    <div class="add-comment">
+                        <img src="https://via.placeholder.com/40" alt="Photo de profil">
+                        <textarea placeholder="Ajouter un commentaire..."></textarea>
+                        <button>Commenter</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+                <!-- Zone de commentaires cachée par défaut -->
+                <div class="comments-section hidden">
+                    <div class="comment">
+                        <img src="https://via.placeholder.com/40" alt="Photo commentateur">
+                        <div class="comment-content">
+                            <p><strong>Sophie L.</strong> <span>@sophieL</span></p>
+                            <p>La communication régulière est la clé ! Des standups quotidiens courts et efficaces.</p>
+                        </div>
+                    </div>
+
+                    <div class="comment">
+                        <img src="https://via.placeholder.com/40" alt="Photo commentateur">
+                        <div class="comment-content">
+                            <p><strong>Jean M.</strong> <span>@jeanm</span></p>
+                            <p>Utiliser des outils comme Trello ou Notion pour suivre les tâches.</p>
+                        </div>
+                    </div>
+
+                    <!-- Zone pour ajouter un commentaire -->
+                    <div class="add-comment">
+                        <img src="https://via.placeholder.com/40" alt="Photo de profil">
+                        <textarea placeholder="Ajouter un commentaire..."></textarea>
+                        <button>Commenter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 SPORT-HUB - Version 1.0.0</p>
+    </footer>
+</div>
+
+<script src="profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+/* Reset et variables générales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+    --primary-color: #1d9bf0;
+    --bg-color: #f7f9f9;
+    --text-color: #0f1419;
+    --secondary-text: #536471;
+    --border-color: #eff3f4;
+    --hover-bg: #e7e7e8;
+    --button-hover: #1a8cd8;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    min-height: 100vh;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Header principal */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem;
+    border-bottom: 5px solid var(--border-color);
+    position: relative; /* Pour le positionnement de h1 */
+}
+
+.main-header h1 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+}
+.main-header nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.main-header nav a {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.main-header nav a.active {
+    color: var(--primary-color);
+}
+
+.main-header nav a:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Section profil utilisateur */
+.user-profile {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+
+
+.profile-main {
+    padding: 0 1rem;
+    position: relative;
+}
+
+.profile-pic-container {
+    position: relative;
+    width: 120px;
+    margin-top: -60px;
+}
+
+.profile-pic-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    object-fit: cover;
+}
+
+.change-photo {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.change-photo:hover {
+    background-color: white;
+}
+
+.change-photo i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+#photo-upload {
+    display: none;
+}
+
+.profile-info {
+    margin-top: 0.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-info .display-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.profile-info .username {
+    color: var(--secondary-text);
+    margin-bottom: 0.5rem;
+}
+
+.profile-info .bio {
+    margin: 0.5rem 0;
+}
+
+.location-join {
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.location-join span {
+    display: flex;
+    align-items: center;
+}
+
+.location-join i {
+    margin-right: 0.3rem;
+}
+
+/* Section des posts */
+.posts-section {
+    padding: 1rem;
+}
+
+.posts-section h2 {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+    font-size: 1.3rem;
+}
+
+.create-post {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    background-color: white;
+}
+
+.create-post img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.create-post textarea {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    resize: none;
+    min-height: 60px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.create-post button {
+    align-self: flex-end;
+    background-color: var(--primary-color);
+    color: white;
+    transition: background-color 0.2s;
+}
+
+.create-post button:hover {
+    background-color: var(--button-hover);
+}
+
+/* Style des posts */
+.post {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.post-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 0.8rem;
+}
+
+.post-user {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.post-name {
+    font-weight: 700;
+}
+
+.post-username, .post-time {
+    color: var(--secondary-text);
+    font-size: 0.9rem;
+}
+
+.post-content {
+    margin: 0.5rem 0 1rem;
+    font-size: 1rem;
+}
+
+.post-content p {
+    margin-bottom: 0.5rem;
+}
+
+.post-actions {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-actions button {
+    background: none;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secondary-text);
+    transition: color 0.2s;
+    border-radius: 50px;
+}
+
+.post-actions button:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+    color: var(--primary-color);
+}
+
+/* Section commentaires */
+.comments-section {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.comments-section.hidden {
+    display: none;
+}
+
+.comment {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.comment img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.comment-content {
+    flex-grow: 1;
+}
+
+.comment-content p:first-child {
+    margin-bottom: 0.3rem;
+}
+
+.comment-content p:first-child span {
+    color: var(--secondary-text);
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+.add-comment {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+
+.add-comment img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.add-comment textarea {
+    flex-grow: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 0.8rem;
+    outline: none;
+    resize: none;
+    min-height: 40px;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.add-comment button {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+    transition: background-color 0.2s;
+}
+
+.add-comment button:hover {
+    background-color: var(--button-hover);
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--secondary-text);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .create-post {
+        flex-wrap: wrap;
+    }
+
+    .create-post textarea {
+        width: 100%;
+        order: 1;
+    }
+
+    .create-post button {
+        margin-left: auto;
+    }
+
+    .post-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .post-header img {
+        margin-bottom: 0.5rem;
+    }
+
+    .post-actions {
+        justify-content: space-around;
+    }
+
+    .add-comment {
+        flex-wrap: wrap;
+    }
+
+    .add-comment textarea {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .add-comment button {
+        margin-left: auto;
+    }
+}

@@ -64,6 +64,37 @@
     <footer>
         <p>© 2025 SPORT-HUB - Forum communautaire</p>
     </footer>
+
+    <div id="new-topic-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Créer un nouveau sujet</h2>
+            <form id="new-topic-form" action="/create-topic" method="POST">
+                <div class="form-group">
+                    <label for="topic-title">Titre du sujet:</label>
+                    <input type="text" id="topic-title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="topic-content">Contenu:</label>
+                    <textarea id="topic-content" name="content" rows="6" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="topic-category">Catégorie:</label>
+                    <select id="topic-category" name="category">
+                        <option value="entrainement">Entraînement</option>
+                        <option value="nutrition">Nutrition</option>
+                        <option value="equipement">Équipement</option>
+                        <option value="motivation">Motivation</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Publier</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script src="forum.js"></script>

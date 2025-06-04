@@ -31,8 +31,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.WriteHeader(http.StatusCreated)
-		w.Write([]byte("User created successfully"))
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 

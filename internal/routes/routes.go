@@ -2,12 +2,13 @@ package routes
 
 import (
 	"SportHub-Forum/internal/handlers"
+	"SportHub-Forum/internal/middleware"
 	"SportHub-Forum/internal/static"
 	"net/http"
 )
 
 // Contains the setup for the HTTP routes of the application.
-func SetupRoutes(mux *http.ServeMux) {
+func SetupRoutes(mux *http.ServeMux) http.Handler {
 	// Static files setup
 	static.SetupStaticFiles(mux)
 
@@ -16,4 +17,6 @@ func SetupRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/login", handlers.HandleLogin)
 	mux.HandleFunc("/", handlers.PrincipalPageHandler)
 	mux.HandleFunc("/profile", handlers.ProfilePageHandler)
+
+	return middleware.AuthMiddleware(mux)
 }

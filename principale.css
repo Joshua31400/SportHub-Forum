@@ -122,7 +122,7 @@ footer {
     color: #333;
 }
 
-/* Styles pour le formulaire */
+
 .form-group {
     margin-bottom: 15px;
 }
@@ -140,7 +140,7 @@ footer {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    box-sizing: border-box;
+    resize: none;
 }
 
 .submit-btn {

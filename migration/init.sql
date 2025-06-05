@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS user (
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    userName VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    createdAt DATETIME NOT NULL
+    );
+
+CREATE TABLE IF NOT EXISTS session (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userid INT NOT NULL,
+    sessiontoken VARCHAR(255) NOT NULL,
+    expiresat VARCHAR(255) NOT NULL,
+    FOREIGN KEY (userid) REFERENCES user(userid)
+    );

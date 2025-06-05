@@ -97,3 +97,19 @@ func startPeriodicPing() {
 		}
 	}
 }
+
+func InitTables() error {
+	log.Println("Verification of database tables...")
+	// Verify if the 'users' table exists
+	var exists int
+	err := db.QueryRow("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'users' LIMIT 1").Scan(&exists)
+
+	if err != nil && err != sql.ErrNoRows {
+		return fmt.Errorf("Error of verifycation if table exist: %v", err)
+	}
+
+	if err == sql.ErrNoRows {
+		log.Println("Tables not initialized, creating tables...")
+	}
+	return nil
+}

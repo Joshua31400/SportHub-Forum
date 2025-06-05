@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS user (
 
 -- Table SESSION
 CREATE TABLE IF NOT EXISTS session (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    session_token VARCHAR(255) NOT NULL UNIQUE,
-    expires_at DATETIME NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(userID)
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userid INT NOT NULL,
+    sessiontoken VARCHAR(255) NOT NULL,
+    expiresat VARCHAR(255) NOT NULL,
+    FOREIGN KEY (userid) REFERENCES user(userid)
 );
 
 -- Table CATEGORIE

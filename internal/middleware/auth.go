@@ -1,28 +1,29 @@
+// internal/middleware/auth.go (extrait modifié)
 package middleware
 
 import (
+	"SportHub-Forum/internal/session"
+	"context"
 	"net/http"
+	"strings"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		publicPaths := map[string]bool{
-			"/login":      true,
-			"/createuser": true,
-			"/static/":    true,
-		}
-
-		path := r.URL.Path
-		if publicPaths[path] || (len(path) >= 8 && path[:8] == "/static/") {
+		if r.URL.Path == "/login" || r.URL.Path == "/createuser" ||
+			r.URL.Path == "/static" || strings.HasPrefix(r.URL.Path, "/static/") {
 			next.ServeHTTP(w, r)
 			return
 		}
 
-		_, err := r.Cookie("user_id")
-		if err != nil {
+		userID, valid := session.ValidateSession(r)
+
+		if !valid {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		next.ServeHTTP(w, r)
+
+		ctx := context.WithValue(r.Context(), "userID", userID)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

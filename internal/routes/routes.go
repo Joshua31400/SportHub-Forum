@@ -18,5 +18,8 @@ func SetupRoutes(mux *http.ServeMux) http.Handler {
 	mux.HandleFunc("/", handlers.PrincipalPageHandler)
 	mux.HandleFunc("/profile", handlers.ProfilePageHandler)
 
+	// Logout returns the user to the login page
+	mux.HandleFunc("/logout", handlers.HandleLogout)
+
 	return middleware.AuthMiddleware(mux)
 }

@@ -1,21 +1,23 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 	"runtime"
 	"text/template"
 )
 
-// ProfilePageHandler serves the user profile page
 func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("user_id")
-	if err != nil {
+	// Recover the user ID from the context to redirect to login if not authenticated already
+	userID, ok := r.Context().Value("userID").(int)
+	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
-	userId := cookie.Value
+	// Convert userID to string for template rendering
+	userIDStr := fmt.Sprintf("%d", userID)
 	isAuthenticated := true
 
 	_, b, _, _ := runtime.Caller(0)
@@ -27,13 +29,13 @@ func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return
 	}
-
+	// Prepare data for the template
 	data := struct {
 		IsAuthenticated bool
 		UserId          string
 	}{
 		IsAuthenticated: isAuthenticated,
-		UserId:          userId,
+		UserId:          userIDStr,
 	}
 	tmpl.Execute(w, data)
 }

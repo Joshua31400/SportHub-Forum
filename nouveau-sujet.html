@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un sujet - SPORT-HUB</title>
+    <link rel="stylesheet" href="principale.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+<div class="container">
+    <header class="main-header">
+        <h1>SPORT-HUB</h1>
+        <nav>
+            <a href="/" class="active">Forum</a>
+            <a href="profile.html">Profil</a>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <h2 class="page-title">Créer un nouveau sujet</h2>
+
+        <form id="new-topic-form" action="/create-topic" method="POST">
+            <div class="form-group">
+                <label for="topic-title">Titre du sujet:</label>
+                <input type="text" id="topic-title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="topic-content">Contenu:</label>
+                <textarea id="topic-content" name="content" rows="10" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="topic-category">Catégorie:</label>
+                <select id="topic-category" name="category">
+                    <option value="entrainement">Entraînement</option>
+                    <option value="nutrition">Nutrition</option>
+                    <option value="equipement">Équipement</option>
+                    <option value="motivation">Motivation</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <a href="/" class="cancel-btn">Annuler</a>
+                <button type="submit" class="submit-btn">Publier</button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>© 2025 SPORT-HUB - Forum communautaire</p>
+    </footer>
+</div>
+</body>
+</html>

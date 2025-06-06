@@ -1,6 +1,7 @@
 package database
 
 import (
+	"SportHub-Forum/internal/authentification"
 	"SportHub-Forum/internal/models"
 	"database/sql"
 	"fmt"
@@ -8,11 +9,18 @@ import (
 	"time"
 )
 
-// CreateUser inserts a new user into the database
+// CreateUser inserts a new user into the database with hashed password
 func CreateUser(username, email, password string) error {
+	hashedPassword, err := authentification.HashPassword(password)
+	if err != nil {
+		log.Printf("Ash Error: %v", err)
+		return fmt.Errorf("Wrong password: %v", err)
+	}
+
 	query := `INSERT INTO user (userName, email, password, createdAt) VALUES (?, ?, ?, ?)`
 
-	result, err := ExecWithTimeout(query, username, email, password, time.Now())
+	// Use ashed password and current time for createdAt
+	result, err := ExecWithTimeout(query, username, email, hashedPassword, time.Now())
 	if err != nil {
 		log.Printf("SQL error when creating user: %v", err)
 		return fmt.Errorf("failed to create user: %v", err)

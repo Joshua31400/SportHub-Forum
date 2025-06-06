@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"SportHub-Forum/internal/authentification"
 	"SportHub-Forum/internal/database"
 	"SportHub-Forum/internal/session"
 	"html/template"
@@ -9,8 +10,6 @@ import (
 	"strings"
 )
 
-// Processes user login requests
-// GET: serves login form, POST: authenticates user
 func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		email := r.FormValue("email")
@@ -25,7 +24,6 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		user, err := database.GetUserByEmail(email)
 		if err != nil {
 			log.Printf("Error retrieving user: %v", err)
-
 			if strings.Contains(err.Error(), "not found") {
 				http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 				return
@@ -34,11 +32,12 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if user.Password != password {
+		// Check if the password matches
+		if !authentification.CheckPasswordHash(password, user.Password) {
 			http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 			return
 		}
-		// Create session for the user
+
 		err = session.CreateSession(w, user.UserID)
 		if err != nil {
 			http.Error(w, "Error for session creation", http.StatusInternalServerError)
@@ -47,7 +46,8 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	// Serve login form for GET requests
+
+	// Get request method
 	tmpl := template.Must(template.ParseFiles("web/templates/login.gohtml"))
 	if err := tmpl.Execute(w, nil); err != nil {
 		http.Error(w, "Error rendering page", http.StatusInternalServerError)

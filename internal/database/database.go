@@ -12,8 +12,8 @@ import (
 var db *sql.DB
 
 const (
-	maxRetries   = 3
-	retryDelay   = time.Second * 2
+	maxRetries   = 10
+	retryDelay   = time.Second * 3
 	queryTimeout = time.Second * 5
 )
 

@@ -1,7 +1,6 @@
-package session
+package database
 
 import (
-	"SportHub-Forum/internal/database"
 	"SportHub-Forum/internal/models"
 	"crypto/rand"
 	"encoding/base64"
@@ -40,7 +39,7 @@ func CreateSession(w http.ResponseWriter, userID int) error {
 		ExpiresAt:    expiresAt,
 	}
 
-	db := database.GetDB()
+	db := GetDB()
 	if db == nil {
 		return fmt.Errorf("Connection with the database is not initialized")
 	}
@@ -74,7 +73,7 @@ func ValidateSession(r *http.Request) (int, bool) {
 	var expiresAtStr string
 
 	query := "SELECT userid, expiresat FROM session WHERE sessiontoken = ?"
-	err = database.GetDB().QueryRow(query, token).Scan(&userID, &expiresAtStr)
+	err = GetDB().QueryRow(query, token).Scan(&userID, &expiresAtStr)
 	if err != nil {
 		return 0, false
 	}
@@ -95,7 +94,7 @@ func ValidateSession(r *http.Request) (int, bool) {
 
 func DeleteSession(token string) error {
 	query := "DELETE FROM session WHERE sessiontoken = ?"
-	_, err := database.GetDB().Exec(query, token)
+	_, err := GetDB().Exec(query, token)
 	return err
 }
 

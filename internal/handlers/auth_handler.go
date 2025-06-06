@@ -3,7 +3,6 @@ package handlers
 import (
 	"SportHub-Forum/internal/authentification"
 	"SportHub-Forum/internal/database"
-	"SportHub-Forum/internal/session"
 	"html/template"
 	"log"
 	"net/http"
@@ -38,7 +37,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = session.CreateSession(w, user.UserID)
+		err = database.CreateSession(w, user.UserID)
 		if err != nil {
 			http.Error(w, "Error for session creation", http.StatusInternalServerError)
 			return

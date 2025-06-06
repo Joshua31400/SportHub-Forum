@@ -2,7 +2,7 @@
 package middleware
 
 import (
-	"SportHub-Forum/internal/session"
+	"SportHub-Forum/internal/database"
 	"context"
 	"net/http"
 	"strings"
@@ -16,7 +16,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		userID, valid := session.ValidateSession(r)
+		userID, valid := database.ValidateSession(r)
 
 		if !valid {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)

@@ -13,3 +13,8 @@ CREATE TABLE IF NOT EXISTS session (
     expiresat VARCHAR(255) NOT NULL,
     FOREIGN KEY (userid) REFERENCES user(userid)
     );
+
+CREATE TABLE IF NOT EXISTS category (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+    );

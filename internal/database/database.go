@@ -99,17 +99,34 @@ func startPeriodicPing() {
 }
 
 func InitTables() error {
-	log.Println("Verification of database tables...")
-	// Verify if the 'users' table exists
-	var exists int
-	err := db.QueryRow("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'users' LIMIT 1").Scan(&exists)
+	log.Println("Checking database tables...")
 
-	if err != nil && err != sql.ErrNoRows {
-		return fmt.Errorf("Error of verifycation if table exist: %v", err)
+	// Tables to verify - corrected "user" to "users"
+	tables := []string{"user", "session", "category"}
+	missingTables := []string{}
+
+	// Check each table existence
+	for _, table := range tables {
+		var exists int
+		err := db.QueryRow("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? LIMIT 1", table).Scan(&exists)
+
+		if err != nil && err != sql.ErrNoRows {
+			return fmt.Errorf("error checking table %s: %v", table, err)
+		}
+
+		if err == sql.ErrNoRows {
+			log.Printf("Table '%s' not found", table)
+			missingTables = append(missingTables, table)
+		} else {
+			log.Printf("Table '%s' found", table)
+		}
 	}
 
-	if err == sql.ErrNoRows {
-		log.Println("Tables not initialized, creating tables...")
+	if len(missingTables) > 0 {
+		log.Printf("Missing tables: %v", missingTables)
+	} else {
+		log.Println("All required tables exist")
 	}
+
 	return nil
 }

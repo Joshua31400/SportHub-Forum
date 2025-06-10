@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un sujet - SPORT-HUB</title>
-    <link rel="stylesheet" href="../static/createpost.css">
+    <link rel="stylesheet" href="/static/createpost.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 <body>
 <div class="container">
     <header class="main-header">
-        <h1>SPORT-HUB</h1>
+        <h1 class="red">SPORT-HUB</h1>
         <nav>
             <a href="/" class="active">Forum</a>
-            <a href="profile.html">Profil</a>
+            <a href="/profile">Profil</a>
         </nav>
     </header>
 
@@ -33,13 +33,12 @@
             </div>
 
             <div class="form-group">
-                <label for="topic-category">Catégorie:</label>
-                <select id="topic-category" name="category">
-                    <option value="entrainement">Entraînement</option>
-                    <option value="nutrition">Nutrition</option>
-                    <option value="equipement">Équipement</option>
-                    <option value="motivation">Motivation</option>
-                    <option value="autre">Autre</option>
+                <label for="category">Catégorie</label>
+                <select name="category" id="category" required>
+                    <option value="">Sélectionnez une catégorie</option>
+                    {{range .Categories}}
+                    <option value="{{.ID}}">{{.Name}}</option>
+                    {{end}}
                 </select>
             </div>
 

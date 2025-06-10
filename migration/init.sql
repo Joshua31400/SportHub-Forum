@@ -18,3 +18,9 @@ CREATE TABLE IF NOT EXISTS category (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
     );
+
+INSERT INTO category (name) VALUES ('nutrition') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('entrainement') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('equipement') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('motivation') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('football') ON DUPLICATE KEY UPDATE name=name;

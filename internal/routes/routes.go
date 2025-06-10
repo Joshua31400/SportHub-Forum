@@ -13,6 +13,7 @@ func SetupRoutes(mux *http.ServeMux) http.Handler {
 	static.SetupStaticFiles(mux)
 
 	// User routes
+	mux.HandleFunc("/createpost", handlers.CreatepostepageHandler)
 	mux.HandleFunc("/createuser", handlers.CreateUserHandler)
 	mux.HandleFunc("/login", handlers.HandleLogin)
 	mux.HandleFunc("/", handlers.PrincipalPageHandler)

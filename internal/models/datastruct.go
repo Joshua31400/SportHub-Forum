@@ -2,45 +2,25 @@ package models
 
 import "time"
 
-type User struct {
-	UserID    int       `json:"userid"`
-	Username  string    `json:"username"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"createdat"`
-}
-
-type Session struct {
-	ID           int       `json:"id"`
-	UserID       int       `json:"userid"`
-	SessionToken string    `json:"sessiontoken"`
-	ExpiresAt    time.Time `json:"expiresat"`
-}
-
-type Category struct {
-	ID  int    `json:"id"`
-	Nom string `json:"nom"`
-}
-
 type Post struct {
 	ID        int       `json:"id"`
 	UserID    int       `json:"userid"`
-	Titre     string    `json:"titre"`
-	Contenu   string    `json:"contenu"`
+	Title     string    `json:"titre"`
+	Content   string    `json:"contenu"`
 	ImageURL  string    `json:"imageurl"`
 	CreatedAt time.Time `json:"createdat"`
 }
 
 type PostCategory struct {
-	PostID      int `json:"postid"`
-	CategorieID int `json:"categorieid"`
+	PostID     int `json:"postid"`
+	CategoryID int `json:"categoryid"`
 }
 
 type Comment struct {
 	ID        int       `json:"id"`
 	PostID    int       `json:"postid"`
 	UserID    int       `json:"userid"`
-	Contenu   string    `json:"contenu"`
+	Contenu   string    `json:"content"`
 	CreatedAt time.Time `json:"createdat"`
 }
 

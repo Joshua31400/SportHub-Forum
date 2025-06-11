@@ -24,3 +24,19 @@ INSERT INTO category (name) VALUES ('entrainement') ON DUPLICATE KEY UPDATE name
 INSERT INTO category (name) VALUES ('equipement') ON DUPLICATE KEY UPDATE name=name;
 INSERT INTO category (name) VALUES ('motivation') ON DUPLICATE KEY UPDATE name=name;
 INSERT INTO category (name) VALUES ('football') ON DUPLICATE KEY UPDATE name=name;
+
+CREATE TABLE IF NOT EXISTS post (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    categoryid INT NOT NULL,
+    userid INT NOT NULL,
+    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (categoryid) REFERENCES category(id),
+    FOREIGN KEY (userid) REFERENCES user(userid)
+    );
+
+-- CREATE TABLE IF NOT EXISTS postcategory (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(255) NOT NULL
+--     );

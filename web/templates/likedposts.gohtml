@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPORT-HUB / MES POSTS LIKÉS</title>
+    <link rel="stylesheet" href="/static/principal.css">
+    <link rel="stylesheet" href="/static/postlike.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <header class="main-header">
+        <h1>SPORT-HUB</h1>
+        <nav>
+            <a href="/">Forum</a>
+            <a href="/profile">Profil</a>
+            <a href="/liked-posts" class="active">Posts Likés</a>
+            {{if .IsAuthenticated}}
+            {{else}}
+            {{end}}
+                <a href="/login">Connexion</a>
+                <a href="/register">Inscription</a>
+                <a href="/logout">Déconnexion</a>
+        </nav>
+    </header>
+
+    <main class="liked-posts">
+        <h2><i class="fas fa-heart"></i> Mes Posts Likés</h2>
+
+        <div class="liked-posts-list">
+            {{if .LikedPosts}}
+                {{range .LikedPosts}}
+                    <div class="liked-post-item">
+                        <h3 class="liked-post-title">
+                            <a href="/post/{{.ID}}">{{.Title}}</a>
+                        </h3>
+                        <div class="liked-post-meta">
+                            <span class="author">
+                                <i class="fas fa-user"></i> Posté par: {{.Username}}
+                            </span>
+                            <span class="category">
+                                <i class="fas fa-tag"></i> Catégorie: {{.CategoryName}}
+                            </span>
+                            <span class="date">
+                                <i class="far fa-clock"></i> {{.CreatedAt.Format "02/01/2006 à 15:04"}}
+                            </span>
+                            <span class="like-count">
+                                <i class="fas fa-heart"></i> <span class="likes-count">{{.LikeCount}}</span>
+                            </span>
+                        </div>
+                        <div class="liked-post-preview">
+                            {{if gt (len .Content) 200}}
+                                {{slice .Content 0 200}}...
+                            {{else}}
+                                {{.Content}}
+                            {{end}}
+                        </div>
+                    </div>
+                {{end}}
+            {{else}}
+                <p class="no-liked-posts">Vous n'avez encore liké aucun post. Explorez le forum pour trouver du contenu qui vous intéresse !</p>
+            {{end}}
+        </div>
+
+        <div class="post-actions">
+            <a href="/" class="back-button">
+                <i class="fas fa-arrow-left"></i> Retour au forum
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SPORT-HUB - Forum communautaire sportif</p>
+    </footer>
+</div>
+</body>
+</html>

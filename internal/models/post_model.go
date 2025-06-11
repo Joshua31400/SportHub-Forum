@@ -12,6 +12,7 @@ type Post struct {
 	CategoryID   int       `json:"categoryid"`
 	CategoryName string    `json:"categoryname"`
 	Username     string    `json:"username"`
+	LikeCount    int       `json:"likecount"` // Count of likes for the post
 }
 
 // Future many-to-many relationship between posts and categories for multiple categories per post.gohtml

@@ -14,6 +14,7 @@ func CreatePost(db *sql.DB, post *models.Post) (int, error) {
 		return 0, fmt.Errorf("error inserting post: %w", err)
 	}
 
+	// Get the last inserted ID
 	lastID, err := result.LastInsertId()
 	if err != nil {
 		return 0, fmt.Errorf("error getting post ID: %w", err)
@@ -23,9 +24,10 @@ func CreatePost(db *sql.DB, post *models.Post) (int, error) {
 
 func GetAllPosts(db *sql.DB) ([]models.Post, error) {
 	query := `
-        SELECT p.id, p.title, p.content, p.categoryid, p.userid, p.createdat, u.userName
+        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, p.userid, p.createdat, u.userName
         FROM post p
         LEFT JOIN user u ON p.userid = u.userID
+        LEFT JOIN category c ON p.categoryid = c.id
         ORDER BY p.createdat DESC
     `
 
@@ -47,7 +49,7 @@ func GetAllPosts(db *sql.DB) ([]models.Post, error) {
 		var username sql.NullString
 
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.CategoryID,
-			&post.UserID, &createdAtStr, &username); err != nil {
+			&post.CategoryName, &post.UserID, &createdAtStr, &username); err != nil {
 			return nil, fmt.Errorf("error scanning post row: %w", err)
 		}
 
@@ -69,4 +71,56 @@ func GetAllPosts(db *sql.DB) ([]models.Post, error) {
 		posts = append(posts, post)
 	}
 	return posts, nil
+}
+
+func GetPostByID(db *sql.DB, postID string) (models.Post, error) {
+	query := `
+        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, p.userid, p.createdat, u.userName
+        FROM post p
+        LEFT JOIN user u ON p.userid = u.userID
+        LEFT JOIN category c ON p.categoryid = c.id
+        WHERE p.id = ?
+    `
+
+	var post models.Post
+	var createdAtStr string
+	var username sql.NullString
+
+	// DONT WORK YET
+	loc, err := time.LoadLocation("Europe/Paris")
+	if err != nil {
+		loc = time.UTC
+	}
+
+	err = db.QueryRow(query, postID).Scan(
+		&post.ID,
+		&post.Title,
+		&post.Content,
+		&post.CategoryID,
+		&post.CategoryName,
+		&post.UserID,
+		&createdAtStr,
+		&username,
+	)
+
+	if err != nil {
+		return post, fmt.Errorf("error fetching post: %w", err)
+	}
+
+	if username.Valid {
+		post.Username = username.String
+	} else {
+		post.Username = "User is not registered"
+	}
+
+	if createdAtStr != "" {
+		formats := []string{"2006-01-02 15:04:05", "2006-01-02T15:04:05Z", time.RFC3339}
+		for _, format := range formats {
+			if parsed, err := time.Parse(format, createdAtStr); err == nil {
+				post.CreatedAt = parsed.In(loc)
+				break
+			}
+		}
+	}
+	return post, nil
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPORT-HUB / POST</title>
+    <link rel="stylesheet" href="/static/principal.css">
+    <link rel="stylesheet" href="/static/post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <header class="main-header">
+        <h1>SPORT-HUB</h1>
+        <nav>
+            <a href="/" class="active">Forum</a>
+            <a href="/profile">Profil</a>
+            {{if .IsAuthenticated}}
+                <a href="/logout">Déconnexion</a>
+            {{else}}
+                <a href="/login">Connexion</a>
+                <a href="/register">Inscription</a>
+            {{end}}
+        </nav>
+    </header>
+
+    <main class="post-detail">
+        <article class="post">
+            <div class="post-header">
+                <h2>{{.Post.Title}}</h2>
+                <div class="post-meta">
+                        <span class="author">
+                            <i class="fas fa-user"></i> Posté par: {{.Post.Username}}
+                        </span>
+                    <span class="category">
+                            <i class="fas fa-tag"></i> Catégorie: {{.Post.CategoryName}}
+                        </span>
+                    <span class="date">
+                            <i class="far fa-clock"></i> {{.Post.CreatedAt.Format "02/01/2006 à 15:04"}}
+                        </span>
+                </div>
+            </div>
+            <div class="post-content">
+                {{.Post.Content}}
+            </div>
+            <div class="post-actions">
+                <a href="/" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Retour au forum
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SPORT-HUB - Forum communautaire sportif</p>
+    </footer>
+</div>
+</body>
+</html>

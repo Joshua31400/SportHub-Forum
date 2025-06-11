@@ -19,6 +19,14 @@ func SetupRoutes(mux *http.ServeMux) http.Handler {
 	mux.HandleFunc("/", handlers.PrincipalPageHandler)
 	mux.HandleFunc("/profile", handlers.ProfilePageHandler)
 
+	// Connect to the database
+	notifHandler := &handlers.NotificationHandler{DB: db}
+
+	// Routes pour les notifications
+	router.HandleFunc("/api/notifications", notifHandler.GetUserNotifications).Methods("GET")
+	router.HandleFunc("/api/notifications/read", notifHandler.MarkAsRead).Methods("PUT")
+	router.HandleFunc("/api/notifications/unread/count", notifHandler.GetUnreadCount).Methods("GET")
+
 	// Logout returns the user to the login page
 	mux.HandleFunc("/logout", handlers.HandleLogout)
 

@@ -1,0 +1,26 @@
+{{define "content"}}
+    <div class="notification-header">
+        <h1>Notifications</h1>
+        <div class="notification-count">{{.UnreadCount}}</div>
+    </div>
+
+    <div class="notification-container">
+        {{if eq (len .Notifications) 0}}
+            <div class="empty-state">Vous n'avez pas de notifications.</div>
+        {{else}}
+            {{range .Notifications}}
+                <div class="notification {{if not .IsRead}}unread{{end}}">
+                    <div class="notification-content">
+                        <div class="notification-message">{{.Message}}</div>
+                        <div class="notification-date">{{formatDate .CreatedAt}}</div>
+                    </div>
+                    <div class="notification-actions">
+                        {{if not .IsRead}}
+                            <a href="/notifications/read?id={{.ID}}">Marquer comme lu</a>
+                        {{end}}
+                    </div>
+                </div>
+            {{end}}
+        {{end}}
+    </div>
+{{end}}

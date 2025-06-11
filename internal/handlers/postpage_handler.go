@@ -24,9 +24,16 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 	if isAuthenticated {
 		userID = cookie.Value
 	}
+
 	post, err := database.GetPostByID(database.GetDB(), postID)
 	if err != nil {
 		http.Error(w, "Error to get the post: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	comments, err := database.GetCommentsByPostID(database.GetDB(), postID)
+	if err != nil {
+		http.Error(w, "Error to get comment: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -34,10 +41,12 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 		IsAuthenticated bool
 		UserID          string
 		Post            models.Post
+		Comments        []models.Comment
 	}{
 		IsAuthenticated: isAuthenticated,
 		UserID:          userID,
 		Post:            post,
+		Comments:        comments,
 	}
 
 	tmpl, err := template.ParseFiles("web/templates/post.gohtml")

@@ -43,6 +43,37 @@
             <div class="post-content">
                 {{.Post.Content}}
             </div>
+            <section class="comments-section">
+                <h3>Commentaires ({{len .Comments}})</h3>
+                <div class="comments-list">
+                    {{if .Comments}}
+                        {{range .Comments}}
+                            <div class="comment">
+                                <div class="comment-header">
+                                    <span class="comment-author"><i class="fas fa-user"></i> {{.Username}}</span>
+                                    <span class="comment-date"><i class="far fa-clock"></i> {{.CreatedAt.Format "02/01/2006 à 15:04"}}</span>
+                                </div>
+                                <div class="comment-content">
+                                    {{.Content}}
+                                </div>
+                            </div>
+                        {{end}}
+                    {{else}}
+                        <p class="no-comments">Aucun commentaire pour l'instant. Soyez le premier à commenter !</p>
+                    {{end}}
+                </div>
+
+                <div class="comment-form">
+                    <h4>Ajouter un commentaire</h4>
+                    <form action="/addcomment" method="POST">
+                        <input type="hidden" name="post_id" value="{{.Post.ID}}">
+                        <textarea name="content" placeholder="Votre commentaire..." required></textarea>
+                        <button type="submit" class="submit-comment">
+                            <i class="fas fa-paper-plane"></i> Publier
+                        </button>
+                    </form>
+                </div>
+            </section>
             <div class="post-actions">
                 <a href="/" class="back-button">
                     <i class="fas fa-arrow-left"></i> Retour au forum

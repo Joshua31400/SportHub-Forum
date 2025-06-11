@@ -16,6 +16,7 @@ func SetupRoutes(mux *http.ServeMux) http.Handler {
 	mux.HandleFunc("/createpost", handlers.CreatepostepageHandler)
 	mux.HandleFunc("/createuser", handlers.CreateUserHandler)
 	mux.HandleFunc("/post/", handlers.PostPageHandler)
+	mux.HandleFunc("/addcomment", handlers.AddCommentHandler)
 	mux.HandleFunc("/login", handlers.HandleLogin)
 	mux.HandleFunc("/", handlers.PrincipalPageHandler)
 	mux.HandleFunc("/profile", handlers.ProfilePageHandler)

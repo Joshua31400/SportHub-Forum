@@ -8,19 +8,19 @@ import (
 )
 
 func CreatePost(post models.Post) error {
-	query := `INSERT INTO post (user_id, titre, contenu, image_url, created_at) 
+	query := `INSERT INTO post (user_id, titre, contenu, image_url, created_at)
 	          VALUES (?, ?, ?, ?, ?)`
 
 	if post.CreatedAt.IsZero() {
 		post.CreatedAt = time.Now()
 	}
 
-	_, err := database.DB.Exec(query, post.UserID, post.Titre, post.Contenu, post.ImageURL, post.CreatedAt)
+	_, err := database.GetDB().Exec(query, post.UserID, post.Titre, post.Contenu, post.ImageURL, post.CreatedAt)
 	if err != nil {
-		log.Println("❌ Erreur lors de l’insertion :", err)
+		log.Println("❌ Erreur d’insertion :", err)
 		return err
 	}
 
-	log.Println("✅ Post inséré avec succès depuis requêtepost")
+	log.Println("✅ Post inséré avec succès")
 	return nil
 }

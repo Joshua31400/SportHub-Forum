@@ -45,16 +45,16 @@ func CreatepostepageHandler(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:  time.Now(),
 		}
 
-		// Save the post to the database
+		// Save the post.gohtml to the database
 		db := database.GetDB()
 		postID, err := database.CreatePost(db, post)
 		if err != nil {
-			http.Error(w, "Error creating post: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Error creating post.gohtml: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		// Redirect to the newly created post page (into prinpal page)
-		http.Redirect(w, r, "/post/"+strconv.Itoa(postID), http.StatusSeeOther)
+		// Redirect to the newly created post.gohtml page (into prinpal page)
+		http.Redirect(w, r, "/post.gohtml/"+strconv.Itoa(postID), http.StatusSeeOther)
 		return
 	}
 

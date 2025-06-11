@@ -10,9 +10,10 @@ type Post struct {
 	ImageURL   string    `json:"imageurl"`
 	CreatedAt  time.Time `json:"createdat"`
 	CategoryID int       `json:"categoryid"`
+	Username   string    `json:"username"`
 }
 
-// Future many-to-many relationship between posts and categories for multiple categories per post
+// Future many-to-many relationship between posts and categories for multiple categories per post.gohtml
 type PostCategory struct {
 	PostID     int `json:"postid"`
 	CategoryID int `json:"categoryid"`

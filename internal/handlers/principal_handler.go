@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"SportHub-Forum/internal/database"
 	"net/http"
 	"path/filepath"
 	"runtime"
@@ -12,6 +13,12 @@ func PrincipalPageHandler(w http.ResponseWriter, r *http.Request) {
 	// Check if user is logged in
 	_, err := r.Cookie("user_id")
 	isAuthenticated := err == nil
+
+	posts, err := database.GetAllPosts(database.GetDB())
+	if err != nil {
+		http.Error(w, "Error retrieving posts: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	_, b, _, _ := runtime.Caller(0)
 	projectRoot := filepath.Join(filepath.Dir(b), "../..")
@@ -25,8 +32,10 @@ func PrincipalPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := struct {
 		IsAuthenticated bool
+		Posts           interface{}
 	}{
 		IsAuthenticated: isAuthenticated,
+		Posts:           posts,
 	}
 
 	tmpl.Execute(w, data)

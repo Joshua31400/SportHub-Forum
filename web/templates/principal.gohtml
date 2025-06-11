@@ -23,74 +23,28 @@
     </section>
 
     <section class="forum-topics">
-        <div class="topic">
-            <div class="topic-info">
-                <h3><a href="#">Comment améliorer son endurance ?</a></h3>
-                <p class="meta"><i class="fas fa-user"></i> posté par <strong>@alexfit</strong> · il y a 3h</p>
+        {{range .Posts}}
+            <a href="/post/{{.ID}}" class="topic-link">
+                <div class="topic">
+                    <div class="topic-info">
+                        <h3>{{.Title}}</h3>
+                        <p class="meta"><i class="fas fa-user"></i> posté par <strong>{{if .Username}}@{{.Username}}{{else}}@Utilisateur inconnu{{end}}</strong></p>
+                    </div>
+                    <div class="topic-stats">
+                        <span><i class="far fa-clock"></i> Créé le: {{.CreatedAt.Format "02/01/2006 15:04"}}</span>
+                    </div>
+                </div>
+            </a>
+        {{else}}
+            <div class="no-topics">
+                <p>Aucun post n'a été créé pour le moment.</p>
             </div>
-            <div class="topic-stats">
-                <span><i class="far fa-comment"></i> 12 réponses</span>
-                <span><i class="far fa-clock"></i> Dernière activité : 1h</span>
-            </div>
-        </div>
-
-        <div class="topic">
-            <div class="topic-info">
-                <h3><a href="#">Vos routines matinales sportives ?</a></h3>
-                <p class="meta"><i class="fas fa-user"></i> posté par <strong>@sophieL</strong> · hier</p>
-            </div>
-            <div class="topic-stats">
-                <span><i class="far fa-comment"></i> 8 réponses</span>
-                <span><i class="far fa-clock"></i> Dernière activité : 3h</span>
-            </div>
-        </div>
-
-        <div class="topic">
-            <div class="topic-info">
-                <h3><a href="#">Nutrition et prise de masse</a></h3>
-                <p class="meta"><i class="fas fa-user"></i> posté par <strong>@muscleman</strong> · il y a 2j</p>
-            </div>
-            <div class="topic-stats">
-                <span><i class="far fa-comment"></i> 24 réponses</span>
-                <span><i class="far fa-clock"></i> Dernière activité : 5h</span>
-            </div>
-        </div>
+        {{end}}
     </section>
 
     <footer>
         <p>© 2025 SPORT-HUB - Forum communautaire</p>
     </footer>
-
-    <div id="new-topic-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Créer un nouveau sujet</h2>
-            <form id="new-topic-form" action="/create-topic" method="POST">
-                <div class="form-group">
-                    <label for="topic-title">Titre du sujet:</label>
-                    <input type="text" id="topic-title" name="title" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="topic-content">Contenu:</label>
-                    <textarea id="topic-content" name="content" rows="6" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="topic-category">Catégorie:</label>
-                    <select id="topic-category" name="category">
-                        <option value="entrainement">Entraînement</option>
-                        <option value="nutrition">Nutrition</option>
-                        <option value="equipement">Équipement</option>
-                        <option value="motivation">Motivation</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="submit-btn">Publier</button>
-            </form>
-        </div>
-    </div>
 </div>
 </body>
 </html>

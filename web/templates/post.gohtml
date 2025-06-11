@@ -29,15 +29,21 @@
             <div class="post-header">
                 <h2>{{.Post.Title}}</h2>
                 <div class="post-meta">
-                        <span class="author">
-                            <i class="fas fa-user"></i> Posté par: {{.Post.Username}}
-                        </span>
+                    <span class="author">
+                        <i class="fas fa-user"></i> Posté par: {{.Post.Username}}
+                    </span>
                     <span class="category">
-                            <i class="fas fa-tag"></i> Catégorie: {{.Post.CategoryName}}
-                        </span>
+                        <i class="fas fa-tag"></i> Catégorie: {{.Post.CategoryName}}
+                    </span>
                     <span class="date">
-                            <i class="far fa-clock"></i> {{.Post.CreatedAt.Format "02/01/2006 à 15:04"}}
-                        </span>
+                        <i class="far fa-clock"></i> {{.Post.CreatedAt.Format "02/01/2006 à 15:04"}}
+                    </span>
+                    <span class="like-action">
+                        <a href="/like-post?id={{.Post.ID}}" class="like-button {{if .IsLiked}}liked{{end}}">
+                            <i class="{{if .IsLiked}}fas{{else}}far{{end}} fa-heart"></i>
+                            <span class="likes-count">{{.LikeCount}}</span>
+                        </a>
+                    </span>
                 </div>
             </div>
             <div class="post-content">
@@ -51,7 +57,8 @@
                             <div class="comment">
                                 <div class="comment-header">
                                     <span class="comment-author"><i class="fas fa-user"></i> {{.Username}}</span>
-                                    <span class="comment-date"><i class="far fa-clock"></i> {{.CreatedAt.Format "02/01/2006 à 15:04"}}</span>
+                                    <span class="comment-date"><i
+                                                class="far fa-clock"></i> {{.CreatedAt.Format "02/01/2006 à 15:04"}}</span>
                                 </div>
                                 <div class="comment-content">
                                     {{.Content}}

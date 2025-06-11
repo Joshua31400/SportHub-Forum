@@ -47,6 +47,16 @@ CREATE TABLE IF NOT EXISTS comment (
     FOREIGN KEY (userid) REFERENCES user(userid)
 );
 
+CREATE TABLE IF NOT EXISTS `like` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    postid INT NOT NULL,
+    userid INT NOT NULL,
+    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (postid) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (userid) REFERENCES user(userid),
+    UNIQUE KEY unique_like (userid, postid)
+);
+
 -- CREATE TABLE IF NOT EXISTS postcategory (
 --     id INT AUTO_INCREMENT PRIMARY KEY,
 --     name VARCHAR(255) NOT NULL

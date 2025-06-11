@@ -5,6 +5,7 @@ import (
 	"SportHub-Forum/internal/models"
 	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -21,8 +22,10 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 	isAuthenticated := err == nil
 
 	var userID string
+	var userIDInt int
 	if isAuthenticated {
 		userID = cookie.Value
+		userIDInt, _ = strconv.Atoi(userID)
 	}
 
 	post, err := database.GetPostByID(database.GetDB(), postID)
@@ -37,16 +40,36 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	likeCount, err := database.GetLikesCountByPostID(database.GetDB(), post.ID)
+	if err != nil {
+		http.Error(w, "Error to get likes: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Verify if the user has liked the post
+	isLiked := false
+	if isAuthenticated {
+		isLiked, err = database.IsPostLikedByUser(database.GetDB(), post.ID, userIDInt)
+		if err != nil {
+			http.Error(w, "Error checking like status: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 	data := struct {
 		IsAuthenticated bool
 		UserID          string
 		Post            models.Post
 		Comments        []models.Comment
+		LikeCount       int
+		IsLiked         bool
 	}{
 		IsAuthenticated: isAuthenticated,
 		UserID:          userID,
 		Post:            post,
 		Comments:        comments,
+		LikeCount:       likeCount,
+		IsLiked:         isLiked,
 	}
 
 	tmpl, err := template.ParseFiles("web/templates/post.gohtml")
@@ -57,5 +80,6 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := tmpl.Execute(w, data); err != nil {
 		http.Error(w, "Error to display the template: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
 }

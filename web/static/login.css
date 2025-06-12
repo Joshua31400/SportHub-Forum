@@ -83,23 +83,57 @@ button:hover {
     text-decoration: underline;
 }
 
-.google-btn {
-    background-color: #4285f4;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    display: inline-block;
-    margin: 10px 0;
-    text-align: center;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 16px;
+/* Boutons OAuth */
+.oauth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-.google-btn:hover {
-    background-color: #357ae8;
+.btn-oauth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
 }
+
+.btn-oauth:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-google {
+    color: #333;
+    border-color: #4285F4;
+}
+
+.btn-google:hover {
+    background: #f8f9ff;
+    border-color: #4285F4;
+}
+
+.btn-github {
+    color: white;
+    background: #333;
+    border-color: #333;
+}
+
+.btn-github:hover {
+    background: #444;
+    border-color: #444;
+}
+
+.oauth-icon {
+    width: 20px;
+    height: 20px;
+}
+
 
 .divider {
     text-align: center;

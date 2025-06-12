@@ -105,3 +105,120 @@ func GetUserByEmail(email string) (*models.User, error) {
 
 	return &user, nil
 }
+
+// GetUserByGitHubID retrieves a user by their GitHub ID
+func GetUserByGitHubID(githubID string) (*models.User, error) {
+	var user models.User
+	var createdAtStr string
+	var password sql.NullString
+	var avatar sql.NullString
+	var authProvider sql.NullString
+	var isVerified sql.NullBool
+	var updatedAtStr sql.NullString
+	var googleID sql.NullString
+	var githubIDDB sql.NullString
+
+	query := `SELECT userID, username, email, password, 
+                 DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s') as createdAt,
+                 google_id, github_id, avatar, auth_provider, is_verified,
+                 DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') as updated_at
+          FROM user WHERE github_id = ?`
+
+	err := GetDB().QueryRow(query, githubID).Scan(
+		&user.UserID,
+		&user.Username,
+		&user.Email,
+		&password,
+		&createdAtStr,
+		&googleID,
+		&githubIDDB,
+		&avatar,
+		&authProvider,
+		&isVerified,
+		&updatedAtStr,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("error retrieving user by GitHub ID: %v", err)
+	}
+
+	if createdAtStr != "" {
+		if parsed, err := time.Parse("2006-01-02 15:04:05", createdAtStr); err == nil {
+			user.CreatedAt = parsed
+		}
+	}
+
+	if password.Valid {
+		user.Password = password.String
+	} else {
+		user.Password = ""
+	}
+
+	if googleID.Valid {
+		user.GoogleID = googleID.String
+	} else {
+		user.GoogleID = ""
+	}
+
+	if githubIDDB.Valid {
+		user.GitHubID = githubIDDB.String
+	} else {
+		user.GitHubID = ""
+	}
+
+	if avatar.Valid {
+		user.Avatar = avatar.String
+	} else {
+		user.Avatar = ""
+	}
+
+	if authProvider.Valid {
+		user.AuthProvider = authProvider.String
+	} else {
+		user.AuthProvider = "local"
+	}
+
+	if isVerified.Valid {
+		user.IsVerified = isVerified.Bool
+	} else {
+		user.IsVerified = false
+	}
+
+	if updatedAtStr.Valid && updatedAtStr.String != "" {
+		if parsed, err := time.Parse("2006-01-02 15:04:05", updatedAtStr.String); err == nil {
+			user.UpdatedAt = parsed
+		}
+	}
+
+	return &user, nil
+}
+
+// CreateGitHubUser creates a new user from GitHub OAuth
+func CreateGitHubUser(email, username, githubID, avatar string) (*models.User, error) {
+	query := `INSERT INTO user (username, email, github_id, avatar, auth_provider, is_verified, createdAt, updated_at)
+              VALUES (?, ?, ?, ?, 'github', TRUE, NOW(), NOW())`
+
+	result, err := GetDB().Exec(query, username, email, githubID, avatar)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create GitHub user: %v", err)
+	}
+
+	userID, err := result.LastInsertId()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user ID: %v", err)
+	}
+
+	return &models.User{
+		UserID:       int(userID),
+		Username:     username,
+		Email:        email,
+		Avatar:       avatar,
+		AuthProvider: "github",
+		IsVerified:   true,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	}, nil
+}

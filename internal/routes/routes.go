@@ -22,6 +22,7 @@ func SetupRoutes(mux *http.ServeMux) http.Handler {
 	mux.HandleFunc("/login", handlers.HandleLogin)
 	mux.HandleFunc("/", handlers.PrincipalPageHandler)
 	mux.HandleFunc("/profile", handlers.ProfilePageHandler)
+	mux.HandleFunc("/notifications", handlers.NotificationsHandler)
 
 	// Logout returns the user to the login page
 	mux.HandleFunc("/logout", handlers.HandleLogout)

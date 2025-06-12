@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-// LikePostHandler handles adding or removing likes on posts
+// Handles adding or removing likes on posts
 func LikePostHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost && r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -39,6 +39,10 @@ func LikePostHandler(w http.ResponseWriter, r *http.Request) {
 	if err := database.AddLike(database.GetDB(), postID, userID); err != nil {
 		http.Error(w, fmt.Sprintf("Error processing like: %v", err), http.StatusInternalServerError)
 		return
+	}
+
+	if err := database.CreateLikeNotification(database.GetDB(), postID, userID); err != nil {
+		fmt.Printf("Error to create like notif: %v\n", err)
 	}
 	http.Redirect(w, r, "/post/"+postIDStr, http.StatusSeeOther)
 }

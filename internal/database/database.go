@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"log"
 	"time"
 )
 
@@ -25,10 +24,9 @@ func InitDB(dataSourceName string) error {
 		return fmt.Errorf("failed to open database connection: %v", err)
 	}
 
-	// Pool settings
-	db.SetMaxOpenConns(20)                 // Limit to 20 simultaneous connections
-	db.SetMaxIdleConns(10)                 // Keep up to 10 idle connections
-	db.SetConnMaxLifetime(time.Minute * 5) // Maximum lifetime of a connection
+	db.SetMaxOpenConns(20)
+	db.SetMaxIdleConns(10)
+	db.SetConnMaxLifetime(time.Minute * 5)
 
 	if err = connectWithRetry(); err != nil {
 		return err
@@ -36,7 +34,6 @@ func InitDB(dataSourceName string) error {
 
 	go startPeriodicPing()
 
-	log.Println("Connected to the database successfully")
 	return nil
 }
 
@@ -72,10 +69,8 @@ func connectWithRetry() error {
 	for i := 0; i < maxRetries; i++ {
 		err = db.Ping()
 		if err == nil {
-			return nil // Connection successful
+			return nil
 		}
-
-		log.Printf("Connection attempt failed (%d/%d): %v", i+1, maxRetries, err)
 		time.Sleep(retryDelay)
 	}
 	return fmt.Errorf("connection failed after %d attempts: %v", maxRetries, err)
@@ -88,28 +83,21 @@ func startPeriodicPing() {
 
 	for range ticker.C {
 		if err := db.Ping(); err != nil {
-			log.Printf("Periodic ping failed: %v. Attempting reconnection...", err)
-			if err := connectWithRetry(); err != nil {
-				log.Printf("Reconnection failed: %v", err)
-			} else {
-				log.Println("Successfully reconnected to database")
+			if err := connectWithRetry(); err == nil {
+				// Reconnected successfully
 			}
 		}
 	}
 }
 
+// InitTables verifies and initializes database tables if needed
 func InitTables() error {
-	log.Println("Verification of database tables...")
-	// Verify if the 'users' table exists
 	var exists int
 	err := db.QueryRow("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'users' LIMIT 1").Scan(&exists)
 
 	if err != nil && err != sql.ErrNoRows {
-		return fmt.Errorf("Error of verifycation if table exist: %v", err)
+		return fmt.Errorf("error verifying if table exists: %v", err)
 	}
 
-	if err == sql.ErrNoRows {
-		log.Println("Tables not initialized, creating tables...")
-	}
 	return nil
 }

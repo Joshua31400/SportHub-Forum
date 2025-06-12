@@ -35,7 +35,6 @@ body {
     flex: 1;
 }
 
-/* Header & Navigation */
 .main-header {
     display: flex;
     justify-content: space-between;
@@ -86,7 +85,6 @@ body {
     color: var(--primary-color);
 }
 
-/* Section Headers */
 .forum-header {
     display: flex;
     justify-content: space-between;
@@ -100,7 +98,7 @@ body {
     font-weight: 600;
 }
 
-/* Topics List */
+
 .forum-topics {
     margin-bottom: 40px;
 }
@@ -154,7 +152,6 @@ body {
     margin-bottom: 8px;
 }
 
-/* Buttons */
 .new-topic-btn {
     display: inline-flex;
     align-items: center;
@@ -183,7 +180,6 @@ body {
     background-color: #e5e7eb;
 }
 
-/* Empty States */
 .no-topics {
     background-color: var(--card-bg);
     padding: var(--spacing);
@@ -194,7 +190,6 @@ body {
     margin: 20px 0;
 }
 
-/* Form Styles */
 .form-group {
     margin-bottom: 20px;
 }
@@ -224,7 +219,7 @@ body {
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Detail Pages */
+
 .forum-detail {
     background-color: var(--card-bg);
     padding: var(--spacing);
@@ -250,7 +245,6 @@ body {
     justify-content: flex-end;
 }
 
-/* Footer */
 footer {
     text-align: center;
     padding: var(--spacing) 0;
@@ -259,7 +253,6 @@ footer {
     border-top: 1px solid var(--border-color);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .main-header {
         flex-direction: column;

@@ -1,4 +1,3 @@
--- Créer la table user avec toutes les colonnes nécessaires
 CREATE TABLE IF NOT EXISTS user (
                                     userID INT AUTO_INCREMENT PRIMARY KEY,
                                     userName VARCHAR(255) NOT NULL,
@@ -20,11 +19,12 @@ CREATE TABLE IF NOT EXISTS session (
     FOREIGN KEY (userid) REFERENCES user(userID) -- Correction: userID au lieu de userid
     );
 
--- Créer des index pour les performances
 CREATE INDEX IF NOT EXISTS idx_user_google_id ON user(google_id);
 CREATE INDEX IF NOT EXISTS idx_user_auth_provider ON user(auth_provider);
 CREATE INDEX IF NOT EXISTS idx_user_email ON user(email);
 
--- Insérer un utilisateur de test (optionnel)
 INSERT IGNORE INTO user (userName, email, password, auth_provider, is_verified)
 VALUES ('admin', 'admin@example.com', '$2a$10$hash...', 'local', TRUE);
+
+ALTER TABLE user ADD COLUMN github_id VARCHAR(255) UNIQUE;
+CREATE INDEX idx_user_github_id ON user(github_id);

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"SportHub-Forum/internal/database"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -10,15 +11,15 @@ import (
 
 func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 	// Recover the user ID from the context to redirect to login if not authenticated already
-	userID, ok := r.Context().Value("userID").(int)
-	if !ok {
+	userID, isAuthenticated := database.ValidateSession(r)
+	if !isAuthenticated {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
 	// Convert userID to string for template rendering
 	userIDStr := fmt.Sprintf("%d", userID)
-	isAuthenticated := true
+	isAuthenticated = true
 
 	_, b, _, _ := runtime.Caller(0)
 	projectRoot := filepath.Join(filepath.Dir(b), "../..")

@@ -7,7 +7,16 @@
 </head>
 <body>
 <div class="container">
-    <h1>Connexion</h1>
+    <h1>Connexion </h1>
+
+    <div class="auth-options">
+        <a href="/auth/google/login" class="google-btn">
+            🔍 Se connecter avec Google
+        </a>
+    </div>
+
+    <div class="divider">ou</div>
+
     <form action="/login" method="POST">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>

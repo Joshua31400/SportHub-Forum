@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPORT-HUB / POST</title>
-    <link rel="stylesheet" href="/static/principal.css">
+    <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/post.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/static/js/isactive_nav.js" defer></script>
 </head>
 <body>
 <div class="container">
     <header class="main-header">
         <h1>SPORT-HUB</h1>
         <nav>
-            <a href="/" class="active">Forum</a>
+            <a href="/">Forum</a>
             <a href="/profile">Profil</a>
-            {{if .IsAuthenticated}}
-                <a href="/logout">Déconnexion</a>
-            {{else}}
-                <a href="/login">Connexion</a>
-                <a href="/register">Inscription</a>
-            {{end}}
+            <a href="/liked-posts">Posts Likés</a>
+            <a href="/login">Connexion</a>
+            <a href="/logout">Déconnexion</a>
         </nav>
     </header>
 
-    <main class="post-detail">
-        <article class="post">
-            <div class="post-header">
+    <section class="forum-detail">
+        <article class="topic-full">
+            <div class="topic-header">
                 <h2>{{.Post.Title}}</h2>
-                <div class="post-meta">
+                <div class="meta">
                     <span class="author">
                         <i class="fas fa-user"></i> Posté par: {{.Post.Username}}
                     </span>
@@ -46,27 +44,26 @@
                     </span>
                 </div>
             </div>
-            <div class="post-content">
+            <div class="topic-content">
                 {{.Post.Content}}
             </div>
-            <section class="comments-section">
+            <section class="forum-comments">
                 <h3>Commentaires ({{len .Comments}})</h3>
                 <div class="comments-list">
                     {{if .Comments}}
                         {{range .Comments}}
-                            <div class="comment">
-                                <div class="comment-header">
-                                    <span class="comment-author"><i class="fas fa-user"></i> {{.Username}}</span>
-                                    <span class="comment-date"><i
-                                                class="far fa-clock"></i> {{.CreatedAt.Format "02/01/2006 à 15:04"}}</span>
+                            <div class="topic comment">
+                                <div class="topic-info">
+                                    <span class="author"><i class="fas fa-user"></i> {{.Username}}</span>
+                                    <span class="date"><i class="far fa-clock"></i> {{.CreatedAt.Format "02/01/2006 à 15:04"}}</span>
                                 </div>
-                                <div class="comment-content">
+                                <div class="topic-content">
                                     {{.Content}}
                                 </div>
                             </div>
                         {{end}}
                     {{else}}
-                        <p class="no-comments">Aucun commentaire pour l'instant. Soyez le premier à commenter !</p>
+                        <p class="no-topics">Aucun commentaire pour l'instant. Soyez le premier à commenter !</p>
                     {{end}}
                 </div>
 
@@ -75,22 +72,22 @@
                     <form action="/addcomment" method="POST">
                         <input type="hidden" name="post_id" value="{{.Post.ID}}">
                         <textarea name="content" placeholder="Votre commentaire..." required></textarea>
-                        <button type="submit" class="submit-comment">
+                        <button type="submit" class="new-topic-btn">
                             <i class="fas fa-paper-plane"></i> Publier
                         </button>
                     </form>
                 </div>
             </section>
-            <div class="post-actions">
-                <a href="/" class="back-button">
+            <div class="topic-actions">
+                <a href="/" class="new-topic-btn back-button">
                     <i class="fas fa-arrow-left"></i> Retour au forum
                 </a>
             </div>
         </article>
-    </main>
+    </section>
 
     <footer>
-        <p>&copy; 2025 SPORT-HUB - Forum communautaire sportif</p>
+        <p>© 2025 SPORT-HUB - Forum communautaire</p>
     </footer>
 </div>
 </body>

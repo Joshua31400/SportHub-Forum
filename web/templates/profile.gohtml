@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil - SPORT-HUB</title>
+    <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/profile.css">
-    <link rel="stylesheet" href="/static/principal.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/static/js/isactive_nav.js" defer></script>
 </head>
 <body>
 <div class="container">
@@ -14,45 +15,47 @@
         <h1>SPORT-HUB</h1>
         <nav>
             <a href="/">Forum</a>
-            <a href="/profile" class="active">Profil</a>
+            <a href="/profile">Profil</a>
             <a href="/liked-posts">Posts Likés</a>
-            <a href="/login">Inscription</a>
+            <a href="/login">Connexion</a>
+            <a href="/logout">Déconnexion</a>
         </nav>
     </header>
 
-    <section class="profile-header">
+    <section class="forum-header">
         <div class="profile-info">
             <i class="fas fa-user-circle profile-icon"></i>
             <div class="profile-details">
                 <h2>{{.Username}}</h2>
+                <p>@{{.Username}}</p>
                 <p>Membre depuis: {{.CreatedAt.Format "02/01/2006"}}</p>
             </div>
         </div>
     </section>
 
-    <section class="profile-content">
+    <section class="forum-topics">
         <h2 class="section-title">Mes Posts</h2>
 
         <div class="user-posts">
             {{range .UserPosts}}
-                <a href="/post/{{.ID}}" class="post-link">
-                    <div class="post-item">
-                        <div class="post-info">
+                <a href="/post/{{.ID}}" class="topic-link">
+                    <div class="topic">
+                        <div class="topic-info">
                             <h3>{{.Title}}</h3>
-                            <p class="post-preview">{{if gt (len .Content) 150}}{{slice .Content 0 150}}...{{else}}{{.Content}}{{end}}</p>
+                            <p class="meta">{{if gt (len .Content) 150}}{{slice .Content 0 150}}...{{else}}{{.Content}}{{end}}</p>
                         </div>
-                        <div class="post-stats">
+                        <div class="topic-stats">
                             <span><i class="far fa-clock"></i> Créé le: {{.CreatedAt.Format "02/01/2006 15:04"}}</span>
-                            <span><i class="far fa-thumbs-up"></i> {{.LikeCount}} likes</span>
+                            <span><i class="fas fa-tag"></i> Catégorie: {{.CategoryName}}</span>
                         </div>
                     </div>
                 </a>
             {{else}}
-                <div class="no-posts">
-                    <p>Vous n'avez pas encore créé de posts.</p>
-                    <a href="/createpost" class="create-post-btn"><i class="fas fa-plus-circle"></i> Créer un post</a>
-                </div>
             {{end}}
+            <div class="no-topics">
+                <p>Vous n'avez pas encore créé de posts.</p>
+                <a href="/createpost" class="new-topic-btn"><i class="fas fa-plus-circle"></i> Créer un post</a>
+            </div>
         </div>
     </section>
 

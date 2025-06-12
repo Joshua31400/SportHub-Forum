@@ -4,23 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un sujet - SPORT-HUB</title>
+    <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/createpost.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <script src="/static/js/isactive_nav.js" defer></script>
 </head>
 <body>
 <div class="container">
     <header class="main-header">
-        <h1 class="red">SPORT-HUB</h1>
+        <h1>SPORT-HUB</h1>
         <nav>
-            <a href="/" class="active">Forum</a>
+            <a href="/">Forum</a>
             <a href="/profile">Profil</a>
+            <a href="/liked-posts">Posts Likés</a>
+            <a href="/login">Connexion</a>
+            <a href="/logout">Déconnexion</a>
         </nav>
     </header>
 
-    <div class="form-container">
-        <h2 class="page-title">Créer un nouveau sujet</h2>
+    <section class="forum-header">
+        <h2><i class="fas fa-plus-circle"></i> Créer un nouveau sujet</h2>
+    </section>
 
+    <section class="forum-detail">
         <form id="new-topic-form" action="/createpost" method="POST">
             <div class="form-group">
                 <label for="topic-title">Titre du sujet:</label>
@@ -37,17 +43,21 @@
                 <select name="category" id="category" required>
                     <option value="">Sélectionnez une catégorie</option>
                     {{range .Categories}}
-                    <option value="{{.ID}}">{{.Name}}</option>
+                        <option value="{{.ID}}">{{.Name}}</option>
                     {{end}}
                 </select>
             </div>
 
-            <div class="button-group">
-                <a href="/" class="cancel-btn">Annuler</a>
-                <button type="submit" class="submit-btn">Publier</button>
+            <div class="topic-actions">
+                <a href="/" class="new-topic-btn back-button">
+                    <i class="fas fa-arrow-left"></i> Annuler
+                </a>
+                <button type="submit" class="new-topic-btn">
+                    <i class="fas fa-paper-plane"></i> Publier
+                </button>
             </div>
         </form>
-    </div>
+    </section>
 
     <footer>
         <p>© 2025 SPORT-HUB - Forum communautaire</p>

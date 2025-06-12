@@ -10,11 +10,13 @@ type User struct {
 	CreatedAt time.Time `json:"createdat" db:"createdAt"`
 
 	GoogleID     string    `json:"google_id,omitempty" db:"google_id"`
+	GitHubID     string    `json:"github_id,omitempty" db:"github_id"`
 	Avatar       string    `json:"avatar,omitempty" db:"avatar"`
 	IsVerified   bool      `json:"is_verified" db:"is_verified"`
 	AuthProvider string    `json:"auth_provider" db:"auth_provider"`
 	UpdatedAt    time.Time `json:"updated_at,omitempty" db:"updated_at"`
 }
+
 type GoogleUserInfo struct {
 	ID            string `json:"id"`
 	Email         string `json:"email"`

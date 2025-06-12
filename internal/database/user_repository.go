@@ -61,3 +61,35 @@ func GetUserByEmail(email string) (models.User, error) {
 
 	return user, nil
 }
+
+func GetUserByID(db *sql.DB, userID int) (models.User, error) {
+	var user models.User
+	var createdAtStr string
+
+	query := `SELECT userID, userName, email, password, createdAt FROM user WHERE userID = ?`
+	err := db.QueryRow(query, userID).Scan(
+		&user.UserID,
+		&user.Username,
+		&user.Email,
+		&user.Password,
+		&createdAtStr,
+	)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.User{}, fmt.Errorf("User ID: %d not found", userID)
+		}
+		return models.User{}, fmt.Errorf("Error to get user: %v", err)
+	}
+
+	if createdAtStr != "" {
+		formats := []string{time.RFC3339, "2006-01-02 15:04:05", "2006-01-02T15:04:05Z"}
+		for _, format := range formats {
+			if parsed, err := time.Parse(format, createdAtStr); err == nil {
+				user.CreatedAt = parsed
+				break
+			}
+		}
+	}
+	return user, nil
+}

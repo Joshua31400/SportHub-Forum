@@ -10,24 +10,27 @@ import (
 
 // SetupRoutes configures all application routes
 func SetupRoutes(mux *http.ServeMux) http.Handler {
-	// Setup static file serving
 	static.SetupStaticFiles(mux)
 
 	googleAuthHandler := handlers.NewAuthHandler()
+	githubAuthHandler := handlers.NewGitHubAuthHandler() // Nouveau
 
 	publicMux := http.NewServeMux()
 	publicMux.HandleFunc("/login", handlers.LoginHandler)
 	publicMux.HandleFunc("/createuser", handlers.CreateUserHandler)
 	publicMux.HandleFunc("/logout", handlers.HandleLogout)
+
 	publicMux.HandleFunc("/auth/google/login", googleAuthHandler.GoogleLogin)
 	publicMux.HandleFunc("/auth/google/callback", googleAuthHandler.GoogleCallback)
+
+	publicMux.HandleFunc("/auth/github/login", githubAuthHandler.GitHubLogin)
+	publicMux.HandleFunc("/auth/github/callback", githubAuthHandler.GitHubCallback)
 
 	protectedMux := http.NewServeMux()
 	protectedMux.HandleFunc("/", handlers.PrincipalPageHandler)
 	protectedMux.HandleFunc("/profile", handlers.ProfilePageHandler)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Serve static files directly
 		if strings.HasPrefix(r.URL.Path, "/static/") {
 			mux.ServeHTTP(w, r)
 			return
@@ -50,6 +53,8 @@ func isPublicRoute(path string) bool {
 		"/logout",
 		"/auth/google/login",
 		"/auth/google/callback",
+		"/auth/github/login",
+		"/auth/github/callback",
 	}
 
 	for _, route := range publicRoutes {

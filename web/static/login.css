@@ -82,3 +82,32 @@ button:hover {
 .register-link a:hover {
     text-decoration: underline;
 }
+
+.google-btn {
+    background-color: #4285f4;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 10px 0;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.google-btn:hover {
+    background-color: #357ae8;
+}
+
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    color: #666;
+    font-style: italic;
+}
+
+.auth-options {
+    margin: 20px 0;
+}

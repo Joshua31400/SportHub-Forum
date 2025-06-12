@@ -82,6 +82,15 @@
                 <a href="/" class="new-topic-btn back-button">
                     <i class="fas fa-arrow-left"></i> Retour au forum
                 </a>
+
+                {{ if .IsAuthor }}
+                <form method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce post?')">
+                    <input type="hidden" name="action" value="delete">
+                    <button type="submit" class="new-topic-btn delete-button" style="background-color: #e74c3c;">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </form>
+                {{ end }}
             </div>
         </article>
     </section>

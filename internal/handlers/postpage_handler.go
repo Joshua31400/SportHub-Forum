@@ -10,59 +10,91 @@ import (
 )
 
 func PostPageHandler(w http.ResponseWriter, r *http.Request) {
-	// Verify the URL and split it for check if the post ID is valid
 	parts := strings.Split(r.URL.Path, "/")
 	if len(parts) < 3 {
-		http.Error(w, "Post ID wrong", http.StatusBadRequest)
+		http.Error(w, "Invalid URL", http.StatusBadRequest)
 		return
 	}
-	postID := parts[2]
 
-	cookie, err := r.Cookie("user_id")
-	isAuthenticated := err == nil
-
-	var userID string
-	var userIDInt int
-	if isAuthenticated {
-		userID = cookie.Value
-		userIDInt, _ = strconv.Atoi(userID)
-	}
-
-	post, err := database.GetPostByID(database.GetDB(), postID)
+	postID, err := strconv.Atoi(parts[2])
 	if err != nil {
-		http.Error(w, "Error to get the post: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Invalid post ID", http.StatusBadRequest)
 		return
 	}
 
-	comments, err := database.GetCommentsByPostID(database.GetDB(), postID)
+	postIDStr := strconv.Itoa(postID)
+
+	userID, isAuthenticated := database.ValidateSession(r)
+	db := database.GetDB()
+
+	if r.Method == "POST" && r.FormValue("action") == "delete" {
+		if !isAuthenticated {
+			http.Error(w, "You must be logged in to delete this post", http.StatusUnauthorized)
+			return
+		}
+
+		// Get the post to verify the author
+		post, err := database.GetPostByID(db, postIDStr)
+		if err != nil {
+			http.Error(w, "Post not found", http.StatusNotFound)
+			return
+		}
+
+		// Check if the user is the author
+		if userID != post.UserID {
+			http.Error(w, "You are not authorized to delete this post", http.StatusForbidden)
+			return
+		}
+
+		// Delete the post
+		err = database.DeletePost(db, postID)
+		if err != nil {
+			http.Error(w, "Error deleting post: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		// Redirect to homepage
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Get post data
+	post, err := database.GetPostByID(db, postIDStr)
 	if err != nil {
-		http.Error(w, "Error to get comment: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Post not found", http.StatusNotFound)
 		return
 	}
 
-	likeCount, err := database.GetLikesCountByPostID(database.GetDB(), post.ID)
+	isAuthor := isAuthenticated && userID == post.UserID
+
+	comments, err := database.GetCommentsByPostID(db, postIDStr)
 	if err != nil {
-		http.Error(w, "Error to get likes: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Error retrieving comments", http.StatusInternalServerError)
 		return
 	}
 
-	// Verify if the user has liked the post
+	likeCount, err := database.GetLikesCountByPostID(db, postID)
+	if err != nil {
+		http.Error(w, "Error retrieving like count", http.StatusInternalServerError)
+		return
+	}
+
 	isLiked := false
 	if isAuthenticated {
-		isLiked, err = database.IsPostLikedByUser(database.GetDB(), post.ID, userIDInt)
-		if err != nil {
-			http.Error(w, "Error checking like status: "+err.Error(), http.StatusInternalServerError)
-			return
+		liked, err := database.IsPostLikedByUser(db, postID, userID)
+		if err == nil {
+			isLiked = liked
 		}
 	}
 
 	data := struct {
 		IsAuthenticated bool
-		UserID          string
+		UserID          int
 		Post            models.Post
 		Comments        []models.Comment
 		LikeCount       int
 		IsLiked         bool
+		IsAuthor        bool
 	}{
 		IsAuthenticated: isAuthenticated,
 		UserID:          userID,
@@ -70,16 +102,17 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 		Comments:        comments,
 		LikeCount:       likeCount,
 		IsLiked:         isLiked,
+		IsAuthor:        isAuthor,
 	}
 
 	tmpl, err := template.ParseFiles("web/templates/post.gohtml")
 	if err != nil {
-		http.Error(w, "Error to charge template: "+err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return
 	}
 
-	if err := tmpl.Execute(w, data); err != nil {
-		http.Error(w, "Error to display the template: "+err.Error(), http.StatusInternalServerError)
-		return
+	err = tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w, "Error rendering template", http.StatusInternalServerError)
 	}
 }

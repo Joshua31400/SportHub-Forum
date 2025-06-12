@@ -176,3 +176,24 @@ func GetPostsByUserID(db *sql.DB, userID int) ([]models.Post, error) {
 	}
 	return posts, nil
 }
+
+func DeletePost(db *sql.DB, postID int) error {
+	// Execute the delete query
+	result, err := db.Exec("DELETE FROM post WHERE id = ?", postID)
+	if err != nil {
+		return fmt.Errorf("error deleting post: %w", err)
+	}
+
+	// Check that deletion affected a row
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking deletion result: %w", err)
+	}
+
+	// If no row was affected, the post didn't exist
+	if rowsAffected == 0 {
+		return fmt.Errorf("no post found with ID %d", postID)
+	}
+
+	return nil
+}

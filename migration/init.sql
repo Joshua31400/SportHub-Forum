@@ -58,7 +58,12 @@ CREATE TABLE IF NOT EXISTS `like` (
     UNIQUE KEY unique_like (userid, postid)
 );
 
--- CREATE TABLE IF NOT EXISTS postcategory (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     name VARCHAR(255) NOT NULL
---     );
+CREATE TABLE IF NOT EXISTS notification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT NOT NULL,
+    message TEXT NOT NULL,
+    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    sourcetype VARCHAR(50),
+    sourceid INT,
+    FOREIGN KEY (userid) REFERENCES user(userid) ON DELETE CASCADE
+);

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - SPORT-HUB</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/principal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/static/js/isactive_nav.js" defer></script>
+</head>
+<body>
+<div class="container">
+    <header class="main-header">
+        <h1>SPORT-HUB</h1>
+        <nav>
+            <a href="/">Forum</a>
+            <a href="/profile">Profil</a>
+            <a href="/liked-posts">Posts Likés</a>
+            <a href="/notifications">Notifications</a>
+            <a href="/logout">Déconnexion</a>
+        </nav>
+    </header>
+
+    <section class="forum-header">
+        <h2>Mes notifications</h2>
+        {{if .Notifications}}
+            <form action="/notification" method="POST" class="notification-actions">
+                <input type="hidden" name="action" value="delete_all">
+                <button type="submit" class="delete-all-btn"><i class="fas fa-trash"></i> Tout supprimer</button>
+            </form>
+        {{end}}
+    </section>
+
+    <section class="forum-topics">
+        {{range .Notifications}}
+            <div class="topic">
+                <div class="topic-info">
+                    <h3>{{.Message}}</h3>
+                    <p class="meta">
+                        <span><i class="far fa-clock"></i> Reçue le: {{.CreatedAt.Format "02/01/2006 15:04"}}</span>
+                        {{if .SourceType}}
+                            <span><i class="fas fa-tag"></i> Type: {{.SourceType}}</span>
+                        {{end}}
+                    </p>
+                </div>
+                <div class="topic-stats">
+                    <form action="/notifications" method="POST">
+                        <input type="hidden" name="action" value="delete_one">
+                        <input type="hidden" name="notification_id" value="{{.ID}}">
+                        <button type="submit" class="delete-btn"><i class="fas fa-times"></i></button>
+                    </form>
+                </div>
+            </div>
+        {{else}}
+            <div class="no-topics">
+                <p>Vous n'avez aucune notification pour le moment.</p>
+            </div>
+        {{end}}
+    </section>
+
+    <footer>
+        <p>© 2025 SPORT-HUB - Forum communautaire</p>
+    </footer>
+</div>
+</body>
+</html>

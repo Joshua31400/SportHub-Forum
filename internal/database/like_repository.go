@@ -4,6 +4,7 @@ import (
 	"SportHub-Forum/internal/models"
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -40,6 +41,26 @@ func AddLike(db *sql.DB, postID, userID int) error {
 	} else {
 		if _, err := db.Exec("INSERT INTO `like` (postid, userid) VALUES (?, ?)", postID, userID); err != nil {
 			return fmt.Errorf("error adding like: %w", err)
+		}
+
+		var authorID int
+		var postTitle string
+		var likerUsername string
+
+		if err := db.QueryRow("SELECT userid, title FROM post WHERE id = ?", postID).Scan(&authorID, &postTitle); err != nil {
+			return fmt.Errorf("error retrieving post author: %w", err)
+		}
+
+		if err := db.QueryRow("SELECT userName FROM user WHERE userid = ?", userID).Scan(&likerUsername); err != nil {
+			return fmt.Errorf("error retrieving liker username: %w", err)
+		}
+
+		if authorID != userID {
+			message := fmt.Sprintf("%s a aimé votre post : %s", likerUsername, postTitle)
+
+			if err := CreateNotification(authorID, message, "like", postID); err != nil {
+				log.Printf("Error to send notification: %v", err)
+			}
 		}
 	}
 

@@ -4,6 +4,7 @@ import (
 	"SportHub-Forum/internal/models"
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -23,9 +24,36 @@ func AddComment(db *sql.DB, content string, postID, userID int, createdAt time.T
 
 	// Add the comment to the database
 	query := `INSERT INTO comment (content, postid, userid, createdat) VALUES (?, ?, ?, ?)`
-	_, err = db.Exec(query, content, postID, userID, formattedDate)
+	result, err := db.Exec(query, content, postID, userID, formattedDate)
 	if err != nil {
 		return fmt.Errorf("error adding comment: %w", err)
+	}
+
+	var authorID int
+	var postTitle string
+	var commenterUsername string
+
+	if err := db.QueryRow("SELECT userid, title FROM post WHERE id = ?", postID).Scan(&authorID, &postTitle); err != nil {
+		return fmt.Errorf("error retrieving post author: %w", err)
+	}
+
+	if err := db.QueryRow("SELECT userName FROM user WHERE userid = ?", userID).Scan(&commenterUsername); err != nil {
+		return fmt.Errorf("error retrieving commenter username: %w", err)
+	}
+
+	if authorID != userID {
+		message := fmt.Sprintf("%s a commenté votre post : %s", commenterUsername, postTitle)
+
+		commentID, err := result.LastInsertId()
+		if err != nil {
+			if err := CreateNotification(authorID, message, "comment", postID); err != nil {
+				log.Printf("Error to create notif: %v", err)
+			}
+		} else {
+			if err := CreateNotification(authorID, message, "comment", int(commentID)); err != nil {
+				log.Printf("Error to create notif: %v", err)
+			}
+		}
 	}
 
 	return nil

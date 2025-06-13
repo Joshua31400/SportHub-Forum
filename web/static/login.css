@@ -159,6 +159,86 @@ footer {
     opacity: 0.1;
 }
 
+.separator {
+    text-align: center;
+    margin: 25px 0 20px 0;
+    position: relative;
+}
+
+.separator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.separator span {
+    background: var(--card-bg);
+    padding: 0 15px;
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.oauth-section {
+    margin-bottom: 25px;
+}
+
+.btn-github {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid #333;
+    box-sizing: border-box;
+}
+
+.btn-github:hover {
+    background-color: #444;
+    border-color: #444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-github:active {
+    transform: translateY(0);
+}
+
+.github-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .btn-github {
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    .github-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .separator {
+        margin: 20px 0 15px 0;
+    }
+}
 @media (max-width: 480px) {
     .container {
         padding: 30px 20px;

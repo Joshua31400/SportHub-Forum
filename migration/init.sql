@@ -1,63 +1,74 @@
+-- Table des utilisateurs
 CREATE TABLE IF NOT EXISTS user (
     userID INT AUTO_INCREMENT PRIMARY KEY,
     userName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     createdAt DATETIME NOT NULL
-    );
+);
 
-CREATE TABLE IF NOT EXISTS session (
+-- Table des sessions
+CREATE TABLE IF NOT EXISTS sessions (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    userid INT NOT NULL,
-    sessiontoken VARCHAR(255) NOT NULL,
-    expiresat VARCHAR(255) NOT NULL,
-    FOREIGN KEY (userid) REFERENCES user(userid)
-    );
+    userID INT NOT NULL,
+    sessionToken VARCHAR(255) NOT NULL,
+    expiresAt DATETIME NOT NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
 
-CREATE TABLE IF NOT EXISTS category (
+-- Table des catégories
+CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-    );
+    name VARCHAR(255) NOT NULL UNIQUE
+);
 
-INSERT INTO category (name) VALUES ('nutrition') ON DUPLICATE KEY UPDATE name=name;
-INSERT INTO category (name) VALUES ('entrainement') ON DUPLICATE KEY UPDATE name=name;
-INSERT INTO category (name) VALUES ('equipement') ON DUPLICATE KEY UPDATE name=name;
-INSERT INTO category (name) VALUES ('motivation') ON DUPLICATE KEY UPDATE name=name;
-INSERT INTO category (name) VALUES ('football') ON DUPLICATE KEY UPDATE name=name;
+-- Insertion des catégories initiales
+INSERT INTO categories (name) VALUES
+    ('nutrition'),
+    ('entrainement'),
+    ('equipement'),
+    ('motivation'),
+    ('football')
+ON DUPLICATE KEY UPDATE name=name;
 
+-- Table des posts
 CREATE TABLE IF NOT EXISTS post (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
-    categoryid INT NOT NULL,
-    userid INT NOT NULL,
-    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    username VARCHAR(100),
-    FOREIGN KEY (categoryid) REFERENCES category(id),
-    FOREIGN KEY (userid) REFERENCES user(userid)
-    );
+    userID INT NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userID) REFERENCES users(userID)
+);
 
+-- Table de relation many-to-many entre post et catégories
+CREATE TABLE IF NOT EXISTS post_categories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    postID INT NOT NULL,
+    categoryID INT NOT NULL,
+    FOREIGN KEY (postID) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoryID) REFERENCES categories(id),
+    UNIQUE KEY unique_post_category (postID, categoryID)
+);
+
+-- Table des commentaires
 CREATE TABLE IF NOT EXISTS comment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     content TEXT NOT NULL,
-    postid INT NOT NULL,
-    userid INT NOT NULL,
-    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (postid) REFERENCES post(id) ON DELETE CASCADE,
-    FOREIGN KEY (userid) REFERENCES user(userid)
+    postID INT NOT NULL,
+    userID INT NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (postID) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (userID) REFERENCES users(userID)
 );
 
-CREATE TABLE IF NOT EXISTS `like` (
+-- Table des likes
+CREATE TABLE IF NOT EXISTS like_post (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    postid INT NOT NULL,
-    userid INT NOT NULL,
-    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (postid) REFERENCES post(id) ON DELETE CASCADE,
-    FOREIGN KEY (userid) REFERENCES user(userid),
-    UNIQUE KEY unique_like (userid, postid)
-);
-
--- CREATE TABLE IF NOT EXISTS postcategory (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     name VARCHAR(255) NOT NULL
---     );
+    postID INT NOT NULL,
+    userID INT NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (postID) REFERENCES post(id) ON DELETE CASCADE,
+    FOREIGN KEY (userID) REFERENCES users(userID),
+    UNIQUE KEY unique_like (userID, postID)
+)

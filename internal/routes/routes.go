@@ -28,6 +28,7 @@ func SetupRoutes(mux *http.ServeMux) http.Handler {
 
 	// Protected routes (authentication required)
 	protectedMux := http.NewServeMux()
+	protectedMux.HandleFunc("/notifications", handlers.NotificationHandler)
 	protectedMux.HandleFunc("/createpost", handlers.CreatepostepageHandler)
 	protectedMux.HandleFunc("/post/", handlers.PostPageHandler)
 	protectedMux.HandleFunc("/addcomment", handlers.AddCommentHandler)
@@ -72,13 +73,3 @@ func isPublicRoute(path string) bool {
 	}
 	return false
 }
-mux.HandleFunc("/createpost", handlers.CreatepostepageHandler)
-mux.HandleFunc("/createuser", handlers.CreateUserHandler)
-mux.HandleFunc("/notification", handlers.NotificationHandler)
-mux.HandleFunc("/post/", handlers.PostPageHandler)
-mux.HandleFunc("/addcomment", handlers.AddCommentHandler)
-mux.HandleFunc("/like-post", handlers.LikePostHandler)
-mux.HandleFunc("/liked-posts", handlers.LikedPostsHandler)
-mux.HandleFunc("/login", handlers.HandleLogin)
-mux.HandleFunc("/", handlers.PrincipalPageHandler)
-mux.HandleFunc("/profile", handlers.ProfilePageHandler)

@@ -1,8 +1,13 @@
 CREATE TABLE IF NOT EXISTS user (
     userID INT AUTO_INCREMENT PRIMARY KEY,
+    github_id VARCHAR(255) UNIQUE,
+    avatar VARCHAR(500) DEFAULT NULL,
+    auth_provider VARCHAR(50) DEFAULT 'LOCAL',
+    is_verified TINYINT DEFAULT FALSE,
+    updated_at TIMESTAMP NOT NULL,
     userName VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NULL,
     createdAt DATETIME NOT NULL
     );
 
@@ -20,10 +25,19 @@ CREATE TABLE IF NOT EXISTS category (
     );
 
 INSERT INTO category (name) VALUES ('nutrition') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('sante') ON DUPLICATE KEY UPDATE name=name;
 INSERT INTO category (name) VALUES ('entrainement') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('bien-etre') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('conseil') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('evenement') ON DUPLICATE KEY UPDATE name=name;
 INSERT INTO category (name) VALUES ('equipement') ON DUPLICATE KEY UPDATE name=name;
 INSERT INTO category (name) VALUES ('motivation') ON DUPLICATE KEY UPDATE name=name;
 INSERT INTO category (name) VALUES ('football') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('basketball') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('tennis') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('rugby') ON DUPLICATE KEY UPDATE name=name;
+INSERT INTO category (name) VALUES ('autres') ON DUPLICATE KEY UPDATE name=name;
+
 
 CREATE TABLE IF NOT EXISTS post (
     id INT AUTO_INCREMENT PRIMARY KEY,

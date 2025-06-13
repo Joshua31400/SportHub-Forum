@@ -79,7 +79,7 @@ func NotificationHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Redirect to notifications page after deletion
-		http.Redirect(w, r, "/notification", http.StatusSeeOther)
+		http.Redirect(w, r, "/notifications", http.StatusSeeOther)
 		return
 	}
 

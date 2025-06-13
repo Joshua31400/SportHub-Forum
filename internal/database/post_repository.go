@@ -8,8 +8,8 @@ import (
 )
 
 func CreatePost(db *sql.DB, post *models.Post) (int, error) {
-	result, err := db.Exec("INSERT INTO post (title, content, categoryid, userid, createdat) VALUES (?, ?, ?, ?, ?)",
-		post.Title, post.Content, post.CategoryID, post.UserID, post.CreatedAt)
+	result, err := db.Exec("INSERT INTO post (title, content, categoryid, userid, createdat, imageurl) VALUES (?, ?, ?, ?, ?, ?)",
+		post.Title, post.Content, post.CategoryID, post.UserID, post.CreatedAt, post.ImageURL)
 	if err != nil {
 		return 0, fmt.Errorf("error inserting post: %w", err)
 	}
@@ -24,7 +24,8 @@ func CreatePost(db *sql.DB, post *models.Post) (int, error) {
 
 func GetAllPosts(db *sql.DB) ([]models.Post, error) {
 	query := `
-        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, p.userid, p.createdat, u.userName
+        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, 
+               p.userid, p.createdat, u.userName, p.imageurl
         FROM post p
         LEFT JOIN user u ON p.userid = u.userID
         LEFT JOIN category c ON p.categoryid = c.id
@@ -49,7 +50,7 @@ func GetAllPosts(db *sql.DB) ([]models.Post, error) {
 		var username sql.NullString
 
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.CategoryID,
-			&post.CategoryName, &post.UserID, &createdAtStr, &username); err != nil {
+			&post.CategoryName, &post.UserID, &createdAtStr, &username, &post.ImageURL); err != nil {
 			return nil, fmt.Errorf("error scanning post row: %w", err)
 		}
 
@@ -75,7 +76,8 @@ func GetAllPosts(db *sql.DB) ([]models.Post, error) {
 
 func GetPostByID(db *sql.DB, postID string) (models.Post, error) {
 	query := `
-        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, p.userid, p.createdat, u.userName
+        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, 
+               p.userid, p.createdat, u.userName, p.imageurl
         FROM post p
         LEFT JOIN user u ON p.userid = u.userID
         LEFT JOIN category c ON p.categoryid = c.id
@@ -101,6 +103,7 @@ func GetPostByID(db *sql.DB, postID string) (models.Post, error) {
 		&post.UserID,
 		&createdAtStr,
 		&username,
+		&post.ImageURL,
 	)
 
 	if err != nil {
@@ -127,7 +130,8 @@ func GetPostByID(db *sql.DB, postID string) (models.Post, error) {
 
 func GetPostsByUserID(db *sql.DB, userID int) ([]models.Post, error) {
 	query := `
-        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, p.userid, p.createdat, u.userName
+        SELECT p.id, p.title, p.content, p.categoryid, c.name as category_name, 
+               p.userid, p.createdat, u.userName, p.imageurl
         FROM post p
         LEFT JOIN user u ON p.userid = u.userID
         LEFT JOIN category c ON p.categoryid = c.id
@@ -153,7 +157,7 @@ func GetPostsByUserID(db *sql.DB, userID int) ([]models.Post, error) {
 		var username sql.NullString
 
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.CategoryID,
-			&post.CategoryName, &post.UserID, &createdAtStr, &username); err != nil {
+			&post.CategoryName, &post.UserID, &createdAtStr, &username, &post.ImageURL); err != nil {
 			return nil, fmt.Errorf("error scanning post row: %w", err)
 		}
 

@@ -28,6 +28,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    volumes:
+      - ./web/static/uploads:/app/web/static/uploads
     ports:
       - "8080:8080"
     networks:

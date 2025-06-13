@@ -95,6 +95,7 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 		LikeCount       int
 		IsLiked         bool
 		IsAuthor        bool
+		HasImage        bool
 	}{
 		IsAuthenticated: isAuthenticated,
 		UserID:          userID,
@@ -103,6 +104,7 @@ func PostPageHandler(w http.ResponseWriter, r *http.Request) {
 		LikeCount:       likeCount,
 		IsLiked:         isLiked,
 		IsAuthor:        isAuthor,
+		HasImage:        post.ImageURL != "",
 	}
 
 	tmpl, err := template.ParseFiles("web/templates/post.gohtml")

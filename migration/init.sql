@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS post (
     userid INT NOT NULL,
     createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     username VARCHAR(100),
+    imageurl VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (categoryid) REFERENCES category(id),
     FOREIGN KEY (userid) REFERENCES user(userid)
     );

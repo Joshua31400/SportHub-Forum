@@ -3,7 +3,6 @@ package authentification
 import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"strings"
 )
 
 func HashPassword(password string) (string, error) {
@@ -18,18 +17,4 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
-}
-
-func IsPasswordStrong(password string) bool {
-	return len(password) >= 8 &&
-		containsUpper(password) &&
-		containsDigit(password)
-}
-
-func containsUpper(password string) bool {
-	return strings.ContainsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-}
-
-func containsDigit(password string) bool {
-	return strings.ContainsAny(password, "0123456789")
 }

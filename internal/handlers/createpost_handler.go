@@ -3,8 +3,12 @@ package handlers
 import (
 	"SportHub-Forum/internal/database"
 	"SportHub-Forum/internal/models"
+	"fmt"
 	"html/template"
+	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
@@ -12,7 +16,11 @@ import (
 func CreatepostepageHandler(w http.ResponseWriter, r *http.Request) {
 	// Verify that the request method is POST for form submission
 	if r.Method == "POST" {
-		r.ParseForm()
+		err := r.ParseMultipartForm(10 << 20) // Limit 10MB
+		if err != nil {
+			http.Error(w, "Error parsing form: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
 
 		// Get user ID from session
 		userID, isValid := database.ValidateSession(r)
@@ -37,24 +45,73 @@ func CreatepostepageHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		var imageURL string
+		file, handler, err := r.FormFile("image")
+		if err == nil {
+			defer file.Close()
+
+			// Get current working directory
+			currentDir, err := os.Getwd()
+			if err != nil {
+				http.Error(w, "Server error: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Create absolute path for uploads directory
+			uploadDir := filepath.Join(currentDir, "web", "static", "uploads")
+
+			// Create directory with all parents if needed
+			if err := os.MkdirAll(uploadDir, 0755); err != nil {
+				http.Error(w, "Error creating uploads directory: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// Verify directory exists after creation
+			if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
+				http.Error(w, "Error: unable to create uploads directory", http.StatusInternalServerError)
+				return
+			}
+
+			// Create unique filename
+			filename := fmt.Sprintf("%d_%s", time.Now().Unix(), handler.Filename)
+			imagePath := filepath.Join(uploadDir, filename)
+
+			// Create the file on the server
+			dst, err := os.Create(imagePath)
+			if err != nil {
+				http.Error(w, "Error creating file: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+			defer dst.Close()
+
+			// Copy the uploaded file to the destination
+			_, err = io.Copy(dst, file)
+			if err != nil {
+				http.Error(w, "Error saving image: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+			// URL path for the browser (this stays relative)
+			imageURL = "/static/uploads/" + filename
+		}
+
 		post := &models.Post{
 			Title:      title,
 			Content:    content,
 			CategoryID: categoryID,
 			UserID:     userID,
 			CreatedAt:  time.Now(),
+			ImageURL:   imageURL,
 		}
 
-		// Save the post.gohtml to the database
+		// Save the post to the database
 		db := database.GetDB()
 		postID, err := database.CreatePost(db, post)
 		if err != nil {
-			http.Error(w, "Error creating post.gohtml: "+err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Error creating post: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		// Redirect to the newly created post.gohtml page (into prinpal page)
-		http.Redirect(w, r, "/post.gohtml/"+strconv.Itoa(postID), http.StatusSeeOther)
+		http.Redirect(w, r, "/post/"+strconv.Itoa(postID), http.StatusSeeOther)
 		return
 	}
 

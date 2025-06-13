@@ -27,7 +27,7 @@
     </section>
 
     <section class="forum-detail">
-        <form id="new-topic-form" action="/createpost" method="POST">
+        <form id="new-topic-form" action="/createpost" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="topic-title">Titre du sujet:</label>
                 <input type="text" id="topic-title" name="title" required>
@@ -46,6 +46,18 @@
                         <option value="{{.ID}}">{{.Name}}</option>
                     {{end}}
                 </select>
+            </div>
+
+            <div class="form-groupes">
+                <label for="image">Image (optionnel):</label>
+                <div class="custom-file-upload">
+                    <input type="file" id="image" name="image" accept="image/*" class="file-input-hidden">
+                    <label for="image" class="file-upload-btn">
+                        <i class="fas fa-cloud-upload-alt"></i> Choisir une image
+                    </label>
+                    <span id="file-chosen">Aucun fichier sélectionné</span>
+                </div>
+                <small class="form-text">Formats acceptés: JPG, PNG, GIF (max 10 MB)</small>
             </div>
 
             <div class="topic-actions">

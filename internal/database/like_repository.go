@@ -56,11 +56,6 @@ func IsPostLikedByUser(db *sql.DB, postID, userID int) (bool, error) {
 	return exists, nil
 }
 
-// HasUserLikedPost is an alias for IsPostLikedByUser to maintain compatibility
-func HasUserLikedPost(db *sql.DB, postID, userID int) (bool, error) {
-	return IsPostLikedByUser(db, postID, userID)
-}
-
 // GetLikesCountByPostID returns the number of likes for a specific post
 func GetLikesCountByPostID(db *sql.DB, postID int) (int, error) {
 	var count int

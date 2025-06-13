@@ -46,6 +46,12 @@
             </div>
             <div class="topic-content">
                 {{.Post.Content}}
+
+                {{if .Post.ImageURL}}
+                    <div class="post-image">
+                        <img src="{{.Post.ImageURL}}" alt="Image du post" style="max-width: 100%; margin-top: 15px; border-radius: 8px;">
+                    </div>
+                {{end}}
             </div>
             <section class="forum-comments">
                 <h3>Commentaires ({{len .Comments}})</h3>

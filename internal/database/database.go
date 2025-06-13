@@ -52,20 +52,6 @@ func ExecWithTimeout(query string, args ...interface{}) (sql.Result, error) {
 	return db.ExecContext(ctx, query, args...)
 }
 
-// QueryRowWithTimeout executes a QueryRow with a 5-second timeout
-func QueryRowWithTimeout(query string, args ...interface{}) *sql.Row {
-	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
-	defer cancel()
-	return db.QueryRowContext(ctx, query, args...)
-}
-
-// QueryWithTimeout executes a Query with a 5-second timeout
-func QueryWithTimeout(query string, args ...interface{}) (*sql.Rows, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
-	defer cancel()
-	return db.QueryContext(ctx, query, args...)
-}
-
 // connectWithRetry attempts to connect to the database with retries
 func connectWithRetry() error {
 	var err error
@@ -96,37 +82,4 @@ func startPeriodicPing() {
 			}
 		}
 	}
-}
-
-func InitTables() error {
-	log.Println("Checking database tables...")
-
-	// Tables to verify - corrected "user" to "users"
-	tables := []string{"user", "session", "category"}
-	missingTables := []string{}
-
-	// Check each table existence
-	for _, table := range tables {
-		var exists int
-		err := db.QueryRow("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? LIMIT 1", table).Scan(&exists)
-
-		if err != nil && err != sql.ErrNoRows {
-			return fmt.Errorf("error checking table %s: %v", table, err)
-		}
-
-		if err == sql.ErrNoRows {
-			log.Printf("Table '%s' not found", table)
-			missingTables = append(missingTables, table)
-		} else {
-			log.Printf("Table '%s' found", table)
-		}
-	}
-
-	if len(missingTables) > 0 {
-		log.Printf("Missing tables: %v", missingTables)
-	} else {
-		log.Println("All required tables exist")
-	}
-
-	return nil
 }

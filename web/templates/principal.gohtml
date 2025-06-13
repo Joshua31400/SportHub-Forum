@@ -27,6 +27,43 @@
         <a href="/createpost" class="new-topic-btn"><i class="fas fa-plus-circle"></i>Nouveau post</a>
     </section>
 
+    <!-- Section des filtres -->
+    <section class="filter-section">
+        <div class="filter-container">
+            <form id="filter-form" method="get" action="/">
+                <div class="filter-group">
+                    <label for="category">Catégorie:</label>
+                    <select name="category_id" id="category">
+                        <option value="">Toutes les catégories</option>
+                        {{range .Categories}}
+                            <option value="{{.ID}}" {{if eq $.SelectedCategoryID .ID}}selected{{end}}>{{.Name}}</option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort">Trier par:</label>
+                    <select name="sort" id="sort">
+                        <option value="date" {{if eq $.SelectedSort "date"}}selected{{end}}>Date (récent)</option>
+                        <option value="likes" {{if eq $.SelectedSort "likes"}}selected{{end}}>Popularité</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="limit">Afficher:</label>
+                    <select name="limit" id="limit">
+                        <option value="10" {{if eq $.SelectedLimit 10}}selected{{end}}>10 posts</option>
+                        <option value="25" {{if eq $.SelectedLimit 25}}selected{{end}}>25 posts</option>
+                        <option value="50" {{if eq $.SelectedLimit 50}}selected{{end}}>50 posts</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="filter-btn">Filtrer</button>
+                <a href="/" class="reset-btn">Réinitialiser</a>
+            </form>
+        </div>
+    </section>
+
     <section class="forum-topics">
         {{range .Posts}}
             <a href="/post/{{.ID}}" class="topic-link">

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"SportHub-Forum/internal/database"
+	"fmt"
 	"net/http"
 	"path/filepath"
 	"runtime"

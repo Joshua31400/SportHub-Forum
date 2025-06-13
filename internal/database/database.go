@@ -36,7 +36,6 @@ func InitDB(dataSourceName string) error {
 
 	go startPeriodicPing()
 
-	log.Println("Connected to the database successfully")
 	return nil
 }
 

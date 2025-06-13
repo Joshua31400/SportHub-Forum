@@ -33,9 +33,11 @@ func PrincipalPageHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		IsAuthenticated bool
 		Posts           interface{}
+		UserID          int
 	}{
 		IsAuthenticated: isAuthenticated,
 		Posts:           posts,
+		UserID:          userID,
 	}
 
 	tmpl.Execute(w, data)

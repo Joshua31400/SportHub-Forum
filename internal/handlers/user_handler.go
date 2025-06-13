@@ -1,13 +1,11 @@
 package handlers
 
 import (
-	"net/http"
-	"path/filepath"
-	"runtime"
-
 	"SportHub-Forum/internal/database"
+	"net/http"
 )
 
+// CreateUserHandler handles user registration (GET displays form, POST processes registration)
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	// Manage the post request method
 	if r.Method == http.MethodPost {
@@ -35,10 +33,5 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// For GET requests, serve the HTML template for user creation
-	_, b, _, _ := runtime.Caller(0)
-	projectRoot := filepath.Join(filepath.Dir(b), "../..")
-	templatePath := filepath.Join(projectRoot, "web/templates/createuser.gohtml")
-
-	http.ServeFile(w, r, templatePath)
+	http.ServeFile(w, r, "web/templates/createuser.gohtml")
 }

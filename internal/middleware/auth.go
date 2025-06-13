@@ -1,4 +1,3 @@
-// internal/middleware/auth.go (extrait modifié)
 package middleware
 
 import (
@@ -8,8 +7,10 @@ import (
 	"strings"
 )
 
+// AuthMiddleware validates user sessions and protects routes
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Allow public access to authentication routes and static files
 		if r.URL.Path == "/login" || r.URL.Path == "/createuser" ||
 			r.URL.Path == "/static" || strings.HasPrefix(r.URL.Path, "/static/") {
 			next.ServeHTTP(w, r)

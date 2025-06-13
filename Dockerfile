@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
@@ -14,9 +14,8 @@ FROM alpine:3.18
 
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates
+RUN apk update && apk add --no-cache ca-certificates
 
-RUN ls -la /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/web ./web
 
